@@ -107,6 +107,19 @@ export function initModal() {
     openHeroModal(card.dataset.heroId);
   });
 
+  // Permite abrir el modal con teclado (Enter o Space), igual que un botón nativo,
+  // ya que las cards ahora son enfocables (tabindex + role="button" en render.js)
+  heroGrid.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+
+    const card = event.target.closest("[data-hero-id]");
+    if (!card) return;
+
+    // Evitamos que Space haga scroll de la página al usarlo sobre la card
+    event.preventDefault();
+    openHeroModal(card.dataset.heroId);
+  });
+
   closeModalButton.addEventListener("click", closeHeroModal);
 
   // Si el click fue justo sobre el <dialog> (el fondo/backdrop) y no sobre algo

@@ -23,7 +23,8 @@ export async function fetchHeroes() {
     // Si algo sale mal (sin internet, servidor caído, etc.) lo mostramos en consola
     console.error("Failed to fetch heroes:", error);
 
-    // Devolvemos un array vacío para que el resto del código no se rompa
-    return [];
+    // Devolvemos null (en vez de un array vacío) para poder distinguir
+    // "la API falló" de "la búsqueda no encontró resultados"
+    return null;
   }
 }
