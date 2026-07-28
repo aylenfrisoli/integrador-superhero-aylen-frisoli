@@ -1,7 +1,10 @@
 // Traemos el estado global, la función que dibuja las cards y la que recorta la página actual
 import { state } from "./state.js";
 import { renderHeroes } from "./render.js";
-import { getHeroesForCurrentPage } from "./pagination.js";
+import {
+  getHeroesForCurrentPage,
+  renderPaginationControls,
+} from "./pagination.js";
 
 // Compara el nombre del héroe con el texto buscado, sin importar mayúsculas/minúsculas
 function matchesSearchQuery(hero) {
@@ -37,6 +40,9 @@ export function applyFilters() {
 
   state.currentPage = 1;
   renderHeroes(getHeroesForCurrentPage());
+
+  // Actualiza los botones de paginación y el resumen de resultados según el nuevo filtro
+  renderPaginationControls();
 }
 
 // Genera las opciones del select de editoriales a partir de los héroes ya cargados,

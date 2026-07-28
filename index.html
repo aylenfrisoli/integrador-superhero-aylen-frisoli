@@ -47,16 +47,19 @@
           </select>
         </section>
 
+        <!-- Texto que muestra cuántos resultados hay en la página actual sobre el total filtrado -->
+        <p id="results-summary" class="mb-2 text-sm text-gray-500" aria-live="polite"></p>
+
         <!-- Acá se pintan las cards de héroes con JavaScript -->
         <section
           id="hero-grid"
           class="grid grid-cols-2 md:grid-cols-4 gap-4"
         ></section>
 
-        <!-- Acá van los botones de paginado más adelante -->
+        <!-- Botones de paginado: First, Previous, Next, Last, dibujados con JavaScript -->
         <section
           id="pagination-controls"
-          class="flex justify-center gap-2 mt-4"
+          class="flex flex-wrap items-center justify-center gap-2 mt-4"
         ></section>
       </main>
     </div>
