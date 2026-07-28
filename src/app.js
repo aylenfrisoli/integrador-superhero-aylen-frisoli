@@ -4,16 +4,9 @@ import { fetchHeroes } from "./js/api.js";
 // Importamos el objeto de estado global
 import { state } from "./js/state.js";
 
-// Importamos la función que dibuja las cards en pantalla
-import { renderHeroes } from "./js/render.js";
-
-// Importamos las funciones de paginación: recortar la página actual,
-// dibujar los controles y activar los botones First/Previous/Next/Last
-import {
-  getHeroesForCurrentPage,
-  renderPaginationControls,
-  initPagination,
-} from "./js/pagination.js";
+// Importamos las funciones de paginación: refrescar héroes + controles juntos,
+// y activar los botones First/Previous/Next/Last
+import { refreshHeroList, initPagination } from "./js/pagination.js";
 
 // Importamos la función que activa la barra de búsqueda
 import { initSearch } from "./js/search.js";
@@ -35,11 +28,9 @@ async function init() {
   // Ahora que ya tenemos los héroes, armamos las opciones del filtro de editorial
   populatePublisherFilterOptions();
 
-  // Mostramos en pantalla solo los héroes de la página actual (los primeros 20)
-  renderHeroes(getHeroesForCurrentPage());
-
-  // Dibujamos los controles de paginación y el resumen de resultados por primera vez
-  renderPaginationControls();
+  // Mostramos en pantalla los héroes de la página actual junto con los controles
+  // de paginación y el resumen de resultados por primera vez
+  refreshHeroList();
 }
 
 // Llamamos a la función para que arranque apenas carga la página

@@ -19,6 +19,14 @@ export function getTotalPages() {
   );
 }
 
+// Vuelve a dibujar la página actual de héroes y los controles de paginación juntos.
+// La usan goToPage, applyFilters y el arranque de la app, para no repetir este mismo
+// par de llamadas en cada lugar que cambia qué héroes hay que mostrar
+export function refreshHeroList() {
+  renderHeroes(getHeroesForCurrentPage());
+  renderPaginationControls();
+}
+
 // Cambia de página: valida que el número esté entre 1 y el total de páginas,
 // actualiza el estado y vuelve a dibujar tanto los héroes como los controles
 export function goToPage(pageNumber) {
@@ -26,8 +34,7 @@ export function goToPage(pageNumber) {
   const validPage = Math.min(Math.max(pageNumber, 1), totalPages);
 
   state.currentPage = validPage;
-  renderHeroes(getHeroesForCurrentPage());
-  renderPaginationControls();
+  refreshHeroList();
 }
 
 // Atajos de navegación: van directo a la primera, anterior, siguiente o última página
