@@ -10,6 +10,9 @@ import { renderHeroes } from "./js/render.js";
 // Importamos la función que recorta los héroes de la página actual
 import { getHeroesForCurrentPage } from "./js/pagination.js";
 
+// Importamos la función que activa la barra de búsqueda
+import { initSearch } from "./js/search.js";
+
 // Función principal que arranca la aplicación
 async function init() {
   // Esperamos a que la API nos devuelva los héroes...
@@ -24,3 +27,6 @@ async function init() {
 
 // Llamamos a la función para que arranque apenas carga la página
 init();
+
+// Activamos la barra de búsqueda para que empiece a escuchar lo que se escribe
+initSearch();

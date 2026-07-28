@@ -15,7 +15,16 @@
 
       <main class="p-4">
         <!-- Acá van a ir la barra de búsqueda y los filtros más adelante -->
-        <section id="filters-section" class="mb-4"></section>
+        <section id="filters-section" class="mb-4">
+          <!-- Input de búsqueda: filtra los héroes por nombre a medida que se escribe -->
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Search heroes by name..."
+            aria-label="Search heroes by name"
+            class="w-full md:w-80 rounded-lg border border-gray-300 bg-white p-2 shadow focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </section>
 
         <!-- Acá se pintan las cards de héroes con JavaScript -->
         <section
