@@ -21,6 +21,9 @@ import { initSearch } from "./js/search.js";
 // Importamos las funciones de los filtros: activar los selects y armar las opciones de editorial
 import { initFilters, populatePublisherFilterOptions } from "./js/filters.js";
 
+// Importamos la función que activa el modal de detalle del héroe
+import { initModal } from "./js/modal.js";
+
 // Función principal que arranca la aplicación
 async function init() {
   // Esperamos a que la API nos devuelva los héroes...
@@ -50,3 +53,6 @@ initFilters();
 
 // Activamos los botones de paginación (First/Previous/Next/Last) para que respondan a los clicks
 initPagination();
+
+// Activamos el modal: escucha los clicks en las cards para abrirlo y en el botón para cerrarlo
+initModal();
