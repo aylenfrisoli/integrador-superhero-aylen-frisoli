@@ -1,6 +1,17 @@
 // Buscamos el contenedor donde van a aparecer las cards, una sola vez
 const heroGrid = document.getElementById("hero-grid");
 
+// Se muestra mientras se espera la respuesta de la API, para que la grilla
+// no se vea vacía/rota mientras carga
+export function renderLoadingState() {
+  heroGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Loading heroes...</p>`;
+}
+
+// Se muestra si la API falla, para distinguirlo de una búsqueda sin resultados
+export function renderErrorState() {
+  heroGrid.innerHTML = `<p class="col-span-full text-center text-red-500">We couldn't load the heroes. Please try again later.</p>`;
+}
+
 // Esta función recibe un array de héroes y los dibuja en pantalla
 export function renderHeroes(heroes) {
   // Vaciamos el contenedor antes de pintar los nuevos resultados

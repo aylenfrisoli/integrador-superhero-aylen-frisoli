@@ -4,6 +4,9 @@ import { fetchHeroes } from "./js/api.js";
 // Importamos el objeto de estado global
 import { state } from "./js/state.js";
 
+// Importamos las funciones que muestran el estado de carga y de error de la API
+import { renderLoadingState, renderErrorState } from "./js/render.js";
+
 // Importamos las funciones de paginación: refrescar héroes + controles juntos,
 // y activar los botones First/Previous/Next/Last
 import { refreshHeroList, initPagination } from "./js/pagination.js";
@@ -19,8 +22,20 @@ import { initModal } from "./js/modal.js";
 
 // Función principal que arranca la aplicación
 async function init() {
+  // Mostramos un aviso de carga mientras esperamos la respuesta de la API
+  renderLoadingState();
+
   // Esperamos a que la API nos devuelva los héroes...
-  state.allHeroes = await fetchHeroes();
+  const heroes = await fetchHeroes();
+
+  // Si la API falló (fetchHeroes devuelve null), avisamos y cortamos acá:
+  // no tiene sentido seguir armando filtros/paginación sin datos
+  if (heroes === null) {
+    renderErrorState();
+    return;
+  }
+
+  state.allHeroes = heroes;
 
   // ...y los guardamos también como "filtrados" (por ahora son los mismos)
   state.filteredHeroes = state.allHeroes;
