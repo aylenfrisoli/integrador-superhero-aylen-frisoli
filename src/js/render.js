@@ -22,10 +22,12 @@ export function renderHeroes(heroes) {
     card.dataset.heroId = hero.id;
 
     // Insertamos la imagen, el nombre y la editorial usando template strings
+    // line-clamp-2 corta nombres largos a 2 líneas y truncate corta la editorial a 1 línea,
+    // así ninguna card se estira ni rompe el grid, sea de 1, 2 o 4 columnas
     card.innerHTML = `
       <img src="${hero.images.sm}" alt="${hero.name}" class="w-full h-40 object-cover rounded" />
-      <h2 class="text-lg font-semibold mt-2">${hero.name}</h2>
-      <p class="text-sm text-gray-500">${hero.biography.publisher}</p>
+      <h2 class="text-lg font-semibold mt-2 line-clamp-2">${hero.name}</h2>
+      <p class="text-sm text-gray-500 truncate">${hero.biography.publisher}</p>
     `;
 
     // Agregamos la card ya armada dentro del contenedor
