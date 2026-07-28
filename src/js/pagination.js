@@ -1,12 +1,105 @@
 import { state } from "./state.js";
+import { renderHeroes } from "./render.js";
 
 // Devuelve solo los héroes que corresponden a la página actual
-// (por ahora usamos esto para mostrar los primeros 20; los botones de
-// paginado los agregamos en la próxima rama)
 export function getHeroesForCurrentPage() {
   const startIndex = (state.currentPage - 1) * state.heroesPerPage;
   const endIndex = startIndex + state.heroesPerPage;
 
   // .slice() "recorta" el array sin modificar el original
   return state.filteredHeroes.slice(startIndex, endIndex);
+}
+
+// Calcula cuántas páginas hay en total según los héroes filtrados.
+// Si no hay resultados, igual devolvemos 1 para no mostrar "Page 1 of 0"
+export function getTotalPages() {
+  return Math.max(
+    1,
+    Math.ceil(state.filteredHeroes.length / state.heroesPerPage)
+  );
+}
+
+// Cambia de página: valida que el número esté entre 1 y el total de páginas,
+// actualiza el estado y vuelve a dibujar tanto los héroes como los controles
+export function goToPage(pageNumber) {
+  const totalPages = getTotalPages();
+  const validPage = Math.min(Math.max(pageNumber, 1), totalPages);
+
+  state.currentPage = validPage;
+  renderHeroes(getHeroesForCurrentPage());
+  renderPaginationControls();
+}
+
+// Atajos de navegación: van directo a la primera, anterior, siguiente o última página
+export function goToFirstPage() {
+  goToPage(1);
+}
+
+export function goToPreviousPage() {
+  goToPage(state.currentPage - 1);
+}
+
+export function goToNextPage() {
+  goToPage(state.currentPage + 1);
+}
+
+export function goToLastPage() {
+  goToPage(getTotalPages());
+}
+
+// Clases de Tailwind que comparten los 4 botones de paginación,
+// incluyendo el estilo "apagado" cuando el botón está disabled
+const BUTTON_CLASSES =
+  "rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm shadow hover:bg-blue-50 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300";
+
+// Actualiza el texto "Showing X of Y results":
+// X = héroes que se ven en la página actual, Y = total de resultados filtrados
+function updateResultsSummary() {
+  const resultsSummary = document.getElementById("results-summary");
+  if (!resultsSummary) return;
+
+  const shownCount = getHeroesForCurrentPage().length;
+  resultsSummary.textContent = `Showing ${shownCount} of ${state.filteredHeroes.length} results`;
+}
+
+// Dibuja los botones First/Previous/Next/Last y el texto "Page X of Y" dentro de #pagination-controls.
+// Cada botón se deshabilita solo cuando no corresponde usarlo (ej: Previous en la página 1)
+export function renderPaginationControls() {
+  const paginationControls = document.getElementById("pagination-controls");
+  const totalPages = getTotalPages();
+  const isFirstPage = state.currentPage === 1;
+  const isLastPage = state.currentPage === totalPages;
+
+  paginationControls.innerHTML = `
+    <button type="button" data-action="first" class="${BUTTON_CLASSES}" ${isFirstPage ? "disabled" : ""}>First</button>
+    <button type="button" data-action="previous" class="${BUTTON_CLASSES}" ${isFirstPage ? "disabled" : ""}>Previous</button>
+    <span id="page-indicator" class="px-2 py-1.5 text-sm text-gray-600">Page ${state.currentPage} of ${totalPages}</span>
+    <button type="button" data-action="next" class="${BUTTON_CLASSES}" ${isLastPage ? "disabled" : ""}>Next</button>
+    <button type="button" data-action="last" class="${BUTTON_CLASSES}" ${isLastPage ? "disabled" : ""}>Last</button>
+  `;
+
+  // Cada vez que se redibujan los controles, actualizamos también el resumen
+  updateResultsSummary();
+}
+
+// Relaciona cada botón (por su data-action) con la función que tiene que ejecutar
+const PAGE_ACTIONS = {
+  first: goToFirstPage,
+  previous: goToPreviousPage,
+  next: goToNextPage,
+  last: goToLastPage,
+};
+
+// Conecta un solo listener en el contenedor (delegación de eventos), porque los
+// botones se recrean cada vez que renderPaginationControls redibuja el HTML
+export function initPagination() {
+  const paginationControls = document.getElementById("pagination-controls");
+
+  paginationControls.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+
+    const action = PAGE_ACTIONS[button.dataset.action];
+    if (action) action();
+  });
 }
