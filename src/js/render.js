@@ -16,10 +16,18 @@ export function renderHeroes(heroes) {
   heroes.forEach((hero) => {
     // Creamos un elemento HTML nuevo para cada héroe (la "card")
     const card = document.createElement("article");
-    card.className = "bg-white rounded-lg shadow p-3 cursor-pointer hover:shadow-lg transition";
+    card.className =
+      "bg-white rounded-lg shadow p-3 cursor-pointer hover:shadow-lg transition focus:outline-none focus:ring-2 focus:ring-blue-400";
 
     // Guardamos el id del héroe en el elemento, para usarlo después en el modal
     card.dataset.heroId = hero.id;
+
+    // Hacemos que la card sea accesible por teclado: tabindex la vuelve enfocable
+    // con Tab, y role="button" + aria-label le avisan a los lectores de pantalla
+    // que actúa como un botón que abre el detalle de este héroe
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", `View details for ${hero.name}`);
 
     // Insertamos la imagen, el nombre y la editorial usando template strings
     // line-clamp-2 corta nombres largos a 2 líneas y truncate corta la editorial a 1 línea,
