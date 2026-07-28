@@ -5,4 +5,7 @@ export const state = {
   filteredHeroes: [],    // acá se guardan los héroes ya buscados/filtrados
   currentPage: 1,       // en qué página de resultados está el usuario
   heroesPerPage: 20,     // cuántos héroes se muestran por página
+  searchQuery: "",       // texto que el usuario escribió en la búsqueda
+  selectedPublisher: "all", // editorial elegida en el filtro ("all" = todas)
+  selectedAlignment: "all", // alineación elegida en el filtro ("all" = todas)
 };

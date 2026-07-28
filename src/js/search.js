@@ -1,7 +1,6 @@
-// Traemos el estado global, la función que dibuja las cards y la que recorta la página actual
+// Traemos el estado global y la función que aplica todos los filtros combinados
 import { state } from "./state.js";
-import { renderHeroes } from "./render.js";
-import { getHeroesForCurrentPage } from "./pagination.js";
+import { applyFilters } from "./filters.js";
 
 // Tiempo de espera (en ms) antes de ejecutar la búsqueda luego de la última tecla
 const DEBOUNCE_DELAY = 300;
@@ -16,23 +15,11 @@ function debounce(func, delay) {
   };
 }
 
-// Filtra TODOS los héroes (state.allHeroes) por nombre, sin importar mayúsculas/minúsculas.
-// Buscamos siempre sobre la lista completa para no perder resultados de búsquedas anteriores.
-function filterHeroesByName(searchTerm) {
-  const normalizedTerm = searchTerm.trim().toLowerCase();
-  return state.allHeroes.filter((hero) =>
-    hero.name.toLowerCase().includes(normalizedTerm)
-  );
-}
-
-// Se ejecuta cada vez que el usuario escribe: filtra, vuelve a la página 1 y repinta las cards
+// Se ejecuta cada vez que el usuario escribe: guarda el texto buscado y
+// aplica todos los filtros juntos (búsqueda + editorial + alineación)
 function handleSearchInput(event) {
-  const searchTerm = event.target.value;
-
-  state.filteredHeroes = filterHeroesByName(searchTerm);
-  state.currentPage = 1;
-
-  renderHeroes(getHeroesForCurrentPage());
+  state.searchQuery = event.target.value;
+  applyFilters();
 }
 
 // Versión "demorada" del manejador de búsqueda, para no filtrar en cada tecla

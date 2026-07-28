@@ -13,6 +13,9 @@ import { getHeroesForCurrentPage } from "./js/pagination.js";
 // Importamos la función que activa la barra de búsqueda
 import { initSearch } from "./js/search.js";
 
+// Importamos las funciones de los filtros: activar los selects y armar las opciones de editorial
+import { initFilters, populatePublisherFilterOptions } from "./js/filters.js";
+
 // Función principal que arranca la aplicación
 async function init() {
   // Esperamos a que la API nos devuelva los héroes...
@@ -20,6 +23,9 @@ async function init() {
 
   // ...y los guardamos también como "filtrados" (por ahora son los mismos)
   state.filteredHeroes = state.allHeroes;
+
+  // Ahora que ya tenemos los héroes, armamos las opciones del filtro de editorial
+  populatePublisherFilterOptions();
 
   // Mostramos en pantalla solo los héroes de la página actual (los primeros 20)
   renderHeroes(getHeroesForCurrentPage());
@@ -30,3 +36,6 @@ init();
 
 // Activamos la barra de búsqueda para que empiece a escuchar lo que se escribe
 initSearch();
+
+// Activamos los selects de filtros para que empiecen a escuchar los cambios
+initFilters();
