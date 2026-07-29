@@ -74,6 +74,36 @@
             <!-- Cada bloque de filtro es su propio panel cómic (borde negro + sombra dura),
                  igual que las cards de héroe -->
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
+              <h3 class="font-heading tracking-wide text-lg mb-2">Sort</h3>
+              <!-- Botones toggle: clickear activa ese orden; clickear de nuevo el mismo
+                   botón lo apaga y vuelve a "none" (ver setSortOrder en filters.js) -->
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  id="sort-asc-button"
+                  aria-label="Sort heroes A to Z"
+                  class="flex-1 rounded-lg border-4 border-black bg-white px-3 py-1.5 text-sm font-bold uppercase comic-shadow transition hover:bg-comic-gold/10 hover:border-comic-gold active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+                  A–Z
+                </button>
+                <button
+                  type="button"
+                  id="sort-desc-button"
+                  aria-label="Sort heroes Z to A"
+                  class="flex-1 rounded-lg border-4 border-black bg-white px-3 py-1.5 text-sm font-bold uppercase comic-shadow transition hover:bg-comic-gold/10 hover:border-comic-gold active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+                  Z–A
+                </button>
+              </div>
+            </div>
+
+            <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
+              <h3 class="font-heading tracking-wide text-lg mb-2">Letter</h3>
+              <!-- Grilla A-Z generada dinámicamente por JS, ver populateLetterFilterGrid en filters.js -->
+              <div id="letter-filter-grid" class="grid grid-cols-6 gap-1"></div>
+            </div>
+
+            <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
               <h3 class="font-heading tracking-wide text-lg mb-2">Publisher</h3>
               <!-- Filtro por editorial: las opciones se generan con JS según los datos que llegan de la API -->
               <select

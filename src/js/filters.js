@@ -205,3 +205,88 @@ export function initFilters() {
     applyFilters();
   });
 }
+
+// Letras del alfabeto para armar la grilla de botones. No sale de los datos:
+// lo que se genera dinámicamente son los 26 elementos <button>, no el alfabeto en sí
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+// border-2 sin comic-shadow: con 26 botones juntos, un borde de 4px + sombra dura
+// de 6px por celda se vería recargado. El gap del grid ya separa cada botón
+const LETTER_BUTTON_CLASSES =
+  "rounded border-2 border-black bg-white text-xs font-bold py-1 transition hover:bg-comic-gold/20 hover:border-comic-gold focus:outline-none focus:ring-2 focus:ring-blue-400";
+
+// Crea los 26 botones A-Z dentro de la grilla. Se llama una sola vez al iniciar
+// la app: si se llamara de nuevo duplicaría los botones
+export function populateLetterFilterGrid() {
+  const letterGrid = document.getElementById("letter-filter-grid");
+
+  ALPHABET.forEach((letter) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = letter;
+    button.dataset.letter = letter;
+    button.setAttribute("aria-label", `Filter heroes starting with ${letter}`);
+    button.className = LETTER_BUTTON_CLASSES;
+    letterGrid.appendChild(button);
+  });
+}
+
+// Resalta con el acento comic-blue el botón de la letra activa (o ninguno si
+// selectedLetter es "all"), mismo criterio de swap de borde que updateFilterActiveStyle
+function updateActiveLetterStyle() {
+  const letterButtons = document.querySelectorAll("#letter-filter-grid button[data-letter]");
+
+  letterButtons.forEach((button) => {
+    const isActive = button.dataset.letter === state.selectedLetter;
+    button.classList.toggle("bg-comic-blue", isActive);
+    button.classList.toggle("text-white", isActive);
+    button.classList.toggle("border-comic-blue", isActive);
+    button.classList.toggle("border-black", !isActive);
+  });
+}
+
+// Conecta un solo listener delegado en la grilla (los 26 botones no se recrean
+// nunca, pero se mantiene el mismo patrón de delegación que usa pagination.js)
+export function initLetterFilter() {
+  const letterGrid = document.getElementById("letter-filter-grid");
+
+  letterGrid.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-letter]");
+    if (!button) return;
+
+    // Un segundo click sobre la misma letra la desactiva (vuelve a "all")
+    const clickedLetter = button.dataset.letter;
+    state.selectedLetter = state.selectedLetter === clickedLetter ? "all" : clickedLetter;
+
+    updateActiveLetterStyle();
+    applyFilters();
+  });
+}
+
+// Resalta con el acento comic-blue el botón de sort activo (o ninguno si sortOrder es "none")
+function updateSortButtonsActiveStyle() {
+  const ascButton = document.getElementById("sort-asc-button");
+  const descButton = document.getElementById("sort-desc-button");
+
+  [ascButton, descButton].forEach((button) => {
+    const buttonOrder = button === ascButton ? "asc" : "desc";
+    const isActive = state.sortOrder === buttonOrder;
+    button.classList.toggle("bg-comic-blue", isActive);
+    button.classList.toggle("text-white", isActive);
+    button.classList.toggle("border-comic-blue", isActive);
+    button.classList.toggle("border-black", !isActive);
+  });
+}
+
+// Un segundo click sobre el mismo orden lo apaga (vuelve a "none")
+function setSortOrder(newOrder) {
+  state.sortOrder = state.sortOrder === newOrder ? "none" : newOrder;
+  updateSortButtonsActiveStyle();
+  applyFilters();
+}
+
+// Conecta los dos botones de orden alfabético
+export function initSortButtons() {
+  document.getElementById("sort-asc-button").addEventListener("click", () => setSortOrder("asc"));
+  document.getElementById("sort-desc-button").addEventListener("click", () => setSortOrder("desc"));
+}

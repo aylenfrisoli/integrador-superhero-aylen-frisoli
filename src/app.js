@@ -14,12 +14,15 @@ import { refreshHeroList, initPagination } from "./js/pagination.js";
 // Importamos la función que activa la barra de búsqueda
 import { initSearch } from "./js/search.js";
 
-// Importamos las funciones de los filtros: activar los selects y armar las opciones
-// de editorial, género y raza
+// Importamos las funciones de los filtros: activar los selects, armar las opciones
+// de editorial/género/raza, y armar + activar la grilla de letras y los botones de orden
 import {
   initFilters,
   populatePublisherFilterOptions,
   populateGenderAndRaceFilterOptions,
+  populateLetterFilterGrid,
+  initLetterFilter,
+  initSortButtons,
 } from "./js/filters.js";
 
 // Importamos la función que activa el modal de detalle del héroe
@@ -67,6 +70,12 @@ initSearch();
 
 // Activamos los selects de filtros para que empiecen a escuchar los cambios
 initFilters();
+
+// La grilla de letras A-Z no depende de los héroes de la API (el alfabeto es fijo),
+// así que se arma y se activa de una vez, sin esperar a init()
+populateLetterFilterGrid();
+initLetterFilter();
+initSortButtons();
 
 // Activamos los botones de paginación (First/Previous/Next/Last) para que respondan a los clicks
 initPagination();
