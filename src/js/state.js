@@ -8,4 +8,8 @@ export const state = {
   searchQuery: "",       // texto que el usuario escribió en la búsqueda
   selectedPublisher: "all", // editorial elegida en el filtro ("all" = todas)
   selectedAlignment: "all", // alineación elegida en el filtro ("all" = todas)
+  selectedLetter: "all",    // letra inicial del nombre elegida en el filtro ("all" = todas)
+  selectedGender: "all",    // género elegido en el filtro ("all" = todos)
+  selectedRace: "all",      // raza elegida en el filtro ("all" = todas)
+  sortOrder: "none",        // orden alfabético por nombre: "none" | "asc" | "desc"
 };
