@@ -41,7 +41,7 @@ function buildStatBarHTML(label, value) {
         <span>${numericValue}</span>
       </div>
       <div class="w-full h-2 bg-gray-200 rounded-full">
-        <div class="h-2 bg-blue-400 rounded-full" style="width: ${numericValue}%"></div>
+        <div class="h-2 bg-comic-blue rounded-full" style="width: ${numericValue}%"></div>
       </div>
     </div>
   `;
@@ -69,7 +69,7 @@ export function openHeroModal(heroId) {
   modalContent.innerHTML = `
     <img src="${hero.images.lg}" alt="${hero.name}" class="w-full h-64 object-cover rounded-lg" />
 
-    <h2 class="text-2xl font-bold mt-4">${hero.name}</h2>
+    <h2 class="text-2xl font-heading tracking-wide mt-4">${hero.name}</h2>
     <p class="text-sm text-gray-500 mb-4">${hero.biography.publisher}</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-sm text-gray-700 mb-4">
