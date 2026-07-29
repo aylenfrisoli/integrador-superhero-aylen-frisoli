@@ -52,12 +52,8 @@
       <!-- max-w-6xl + mx-auto: en pantallas grandes el contenido no se estira de punta
            a punta, queda centrado y más compacto -->
       <main class="p-4 max-w-6xl mx-auto">
-        <!-- Acá van a ir la barra de búsqueda y los filtros más adelante -->
-        <!-- En mobile los filtros se apilan (flex-col); desde sm (640px) pasan a fila.
-             flex-wrap se deja sin prefijo porque incluso a 768px las 3 cajas con ancho fijo
-             (320+224+224px) no entran en una sola fila y necesitan pasar a 2 líneas. -->
-        <section id="filters-section" class="mb-4 flex flex-col sm:flex-row flex-wrap gap-2">
-          <!-- Input de búsqueda: filtra los héroes por nombre a medida que se escribe -->
+        <!-- Barra de búsqueda por nombre, sola arriba de todo -->
+        <section id="search-section" class="mb-4">
           <!-- Mismo lenguaje visual "cómic" que cards/botones (borde negro + sombra dura),
                con acento dorado en hover/focus para que se sienta parte del mismo sistema -->
           <input
@@ -67,44 +63,89 @@
             aria-label="Search heroes by name"
             class="w-full sm:w-80 rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
           />
-
-          <!-- Filtro por editorial: las opciones se generan con JS según los datos que llegan de la API -->
-          <select
-            id="filter-publisher"
-            aria-label="Filter heroes by publisher"
-            class="w-full sm:w-56 rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
-          >
-            <option value="all">All Publishers</option>
-          </select>
-
-          <!-- Filtro por alineación: bueno, malo o neutral -->
-          <select
-            id="filter-alignment"
-            aria-label="Filter heroes by alignment"
-            class="w-full sm:w-56 rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
-          >
-            <option value="all">All Alignments</option>
-            <option value="good">good</option>
-            <option value="bad">bad</option>
-            <option value="neutral">neutral</option>
-          </select>
         </section>
 
-        <!-- Texto que muestra cuántos resultados hay en la página actual sobre el total filtrado -->
-        <p id="results-summary" class="mb-2 text-sm text-gray-500" aria-live="polite"></p>
+        <!-- Layout de dos columnas: sidebar de filtros + contenido principal.
+             flex-col apila todo en mobile; md:flex-row los pone lado a lado en desktop -->
+        <div id="filters-layout" class="flex flex-col md:flex-row gap-4">
+          <!-- md:w-64 shrink-0: en desktop el sidebar tiene ancho fijo y no se achica
+               si el contenido de al lado necesita más espacio -->
+          <aside id="filters-sidebar" class="flex flex-col gap-4 md:w-64 shrink-0">
+            <!-- Cada bloque de filtro es su propio panel cómic (borde negro + sombra dura),
+                 igual que las cards de héroe -->
+            <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
+              <h3 class="font-heading tracking-wide text-lg mb-2">Publisher</h3>
+              <!-- Filtro por editorial: las opciones se generan con JS según los datos que llegan de la API -->
+              <select
+                id="filter-publisher"
+                aria-label="Filter heroes by publisher"
+                class="w-full rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
+              >
+                <option value="all">All Publishers</option>
+              </select>
+            </div>
 
-        <!-- Acá se pintan las cards de héroes con JavaScript -->
-        <!-- 1 columna en mobile, 2 desde sm (tablet angosto), 3 desde md (tablet ancho/desktop) -->
-        <section
-          id="hero-grid"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-        ></section>
+            <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
+              <h3 class="font-heading tracking-wide text-lg mb-2">Alignment</h3>
+              <!-- Filtro por alineación: bueno, malo o neutral -->
+              <select
+                id="filter-alignment"
+                aria-label="Filter heroes by alignment"
+                class="w-full rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
+              >
+                <option value="all">All Alignments</option>
+                <option value="good">good</option>
+                <option value="bad">bad</option>
+                <option value="neutral">neutral</option>
+              </select>
+            </div>
 
-        <!-- Botones de paginado: First, Previous, Next, Last, dibujados con JavaScript -->
-        <section
-          id="pagination-controls"
-          class="flex flex-wrap items-center justify-center gap-2 mt-4"
-        ></section>
+            <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
+              <h3 class="font-heading tracking-wide text-lg mb-2">Gender</h3>
+              <!-- Filtro por género: opciones armadas con JS a partir de los datos reales
+                   (agrupan vacío/"-"/null bajo "Unknown") -->
+              <select
+                id="filter-gender"
+                aria-label="Filter heroes by gender"
+                class="w-full rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
+              >
+                <option value="all">All Genders</option>
+              </select>
+            </div>
+
+            <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
+              <h3 class="font-heading tracking-wide text-lg mb-2">Race</h3>
+              <!-- Filtro por raza: mismo criterio que género -->
+              <select
+                id="filter-race"
+                aria-label="Filter heroes by race"
+                class="w-full rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
+              >
+                <option value="all">All Races</option>
+              </select>
+            </div>
+          </aside>
+
+          <!-- min-w-0: sin esto, un flex item no se achica por debajo del ancho de su
+               contenido, y el grid/paginación podrían empujar el layout de dos columnas -->
+          <div id="results-panel" class="flex-1 min-w-0">
+            <!-- Texto que muestra cuántos resultados hay en la página actual sobre el total filtrado -->
+            <p id="results-summary" class="mb-2 text-sm text-gray-500" aria-live="polite"></p>
+
+            <!-- Acá se pintan las cards de héroes con JavaScript -->
+            <!-- 1 columna en mobile, 2 desde sm (tablet angosto), 3 desde md (tablet ancho/desktop) -->
+            <section
+              id="hero-grid"
+              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+            ></section>
+
+            <!-- Botones de paginado: First, Previous, Next, Last, dibujados con JavaScript -->
+            <section
+              id="pagination-controls"
+              class="flex flex-wrap items-center justify-center gap-2 mt-4"
+            ></section>
+          </div>
+        </div>
       </main>
 
       <!-- Modal con el detalle de cada héroe: se abre al hacer click en una card y se llena con JS -->

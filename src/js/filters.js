@@ -114,6 +114,54 @@ export function populatePublisherFilterOptions() {
   });
 }
 
+// Ordena una lista de valores alfabéticamente dejando "Unknown" siempre al final
+function sortWithUnknownLast(values) {
+  return values.sort((a, b) => {
+    if (a === UNKNOWN_LABEL) return 1;
+    if (b === UNKNOWN_LABEL) return -1;
+    return a.localeCompare(b);
+  });
+}
+
+// Recorre state.allHeroes UNA sola vez para juntar los valores crudos de gender
+// y race, y arma las dos listas únicas (sin repetidos, "Unknown" agrupado y al final)
+// que se usan para llenar los selects correspondientes
+function buildGenderAndRaceOptionLists() {
+  const genderValues = [];
+  const raceValues = [];
+
+  state.allHeroes.forEach((hero) => {
+    genderValues.push(normalizeOrUnknown(hero.appearance.gender));
+    raceValues.push(normalizeOrUnknown(hero.appearance.race));
+  });
+
+  return {
+    genderOptions: sortWithUnknownLast([...new Set(genderValues)]),
+    raceOptions: sortWithUnknownLast([...new Set(raceValues)]),
+  };
+}
+
+// Agrega una opción <option> al select por cada valor de la lista
+function appendOptionsToSelect(selectElement, values) {
+  values.forEach((value) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    selectElement.appendChild(option);
+  });
+}
+
+// Llena los selects de género y raza con las opciones armadas a partir de los
+// héroes ya cargados (se llama una sola vez, al iniciar la app)
+export function populateGenderAndRaceFilterOptions() {
+  const genderSelect = document.getElementById("filter-gender");
+  const raceSelect = document.getElementById("filter-race");
+  const { genderOptions, raceOptions } = buildGenderAndRaceOptionLists();
+
+  appendOptionsToSelect(genderSelect, genderOptions);
+  appendOptionsToSelect(raceSelect, raceOptions);
+}
+
 // Refleja visualmente si un filtro está "activo" (valor distinto de "all") con el
 // color de acento comic-blue. Es solo estético: no cambia el estado ni el filtrado.
 // border-black se saca mientras está activo: si conviviera con border-comic-blue
@@ -130,6 +178,8 @@ function updateFilterActiveStyle(selectElement) {
 export function initFilters() {
   const publisherSelect = document.getElementById("filter-publisher");
   const alignmentSelect = document.getElementById("filter-alignment");
+  const genderSelect = document.getElementById("filter-gender");
+  const raceSelect = document.getElementById("filter-race");
 
   publisherSelect.addEventListener("change", (event) => {
     state.selectedPublisher = event.target.value;
@@ -140,6 +190,18 @@ export function initFilters() {
   alignmentSelect.addEventListener("change", (event) => {
     state.selectedAlignment = event.target.value;
     updateFilterActiveStyle(alignmentSelect);
+    applyFilters();
+  });
+
+  genderSelect.addEventListener("change", (event) => {
+    state.selectedGender = event.target.value;
+    updateFilterActiveStyle(genderSelect);
+    applyFilters();
+  });
+
+  raceSelect.addEventListener("change", (event) => {
+    state.selectedRace = event.target.value;
+    updateFilterActiveStyle(raceSelect);
     applyFilters();
   });
 }

@@ -14,8 +14,13 @@ import { refreshHeroList, initPagination } from "./js/pagination.js";
 // Importamos la función que activa la barra de búsqueda
 import { initSearch } from "./js/search.js";
 
-// Importamos las funciones de los filtros: activar los selects y armar las opciones de editorial
-import { initFilters, populatePublisherFilterOptions } from "./js/filters.js";
+// Importamos las funciones de los filtros: activar los selects y armar las opciones
+// de editorial, género y raza
+import {
+  initFilters,
+  populatePublisherFilterOptions,
+  populateGenderAndRaceFilterOptions,
+} from "./js/filters.js";
 
 // Importamos la función que activa el modal de detalle del héroe
 import { initModal } from "./js/modal.js";
@@ -44,8 +49,10 @@ async function init() {
   document.getElementById("hero-count-badge").textContent =
     `${state.allHeroes.length} heroes and counting`;
 
-  // Ahora que ya tenemos los héroes, armamos las opciones del filtro de editorial
+  // Ahora que ya tenemos los héroes, armamos las opciones de los filtros que
+  // dependen de los datos reales: editorial, género y raza
   populatePublisherFilterOptions();
+  populateGenderAndRaceFilterOptions();
 
   // Mostramos en pantalla los héroes de la página actual junto con los controles
   // de paginación y el resumen de resultados por primera vez
