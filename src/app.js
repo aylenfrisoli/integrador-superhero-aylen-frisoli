@@ -40,6 +40,10 @@ async function init() {
   // ...y los guardamos también como "filtrados" (por ahora son los mismos)
   state.filteredHeroes = state.allHeroes;
 
+  // Actualizamos el badge del hero con la cantidad real de héroes que trajo la API
+  document.getElementById("hero-count-badge").textContent =
+    `${state.allHeroes.length} heroes and counting`;
+
   // Ahora que ya tenemos los héroes, armamos las opciones del filtro de editorial
   populatePublisherFilterOptions();
 

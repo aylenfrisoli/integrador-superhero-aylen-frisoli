@@ -62,6 +62,17 @@ export function populatePublisherFilterOptions() {
   });
 }
 
+// Refleja visualmente si un filtro está "activo" (valor distinto de "all") con el
+// color de acento comic-blue. Es solo estético: no cambia el estado ni el filtrado.
+// border-black se saca mientras está activo: si conviviera con border-comic-blue
+// ambas clases tienen la misma especificidad y el borde negro ganaría el empate
+function updateFilterActiveStyle(selectElement) {
+  const isActive = selectElement.value !== "all";
+  selectElement.classList.toggle("border-comic-blue", isActive);
+  selectElement.classList.toggle("bg-comic-blue/10", isActive);
+  selectElement.classList.toggle("border-black", !isActive);
+}
+
 // Conecta los selects de editorial y alineación: al cambiar, actualizan el estado
 // y vuelven a aplicar todos los filtros juntos
 export function initFilters() {
@@ -70,11 +81,13 @@ export function initFilters() {
 
   publisherSelect.addEventListener("change", (event) => {
     state.selectedPublisher = event.target.value;
+    updateFilterActiveStyle(publisherSelect);
     applyFilters();
   });
 
   alignmentSelect.addEventListener("change", (event) => {
     state.selectedAlignment = event.target.value;
+    updateFilterActiveStyle(alignmentSelect);
     applyFilters();
   });
 }

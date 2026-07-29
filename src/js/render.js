@@ -27,8 +27,10 @@ export function renderHeroes(heroes) {
   heroes.forEach((hero) => {
     // Creamos un elemento HTML nuevo para cada héroe (la "card")
     const card = document.createElement("article");
+    // Estilo "panel de cómic": borde negro grueso + sombra dura sin blur (comic-shadow,
+    // definida en app.css). En hover la card "se levanta" y la sombra crece (comic-shadow-lg)
     card.className =
-      "bg-white rounded-lg shadow p-3 cursor-pointer hover:shadow-lg transition focus:outline-none focus:ring-2 focus:ring-blue-400";
+      "bg-white rounded-lg border-4 border-black comic-shadow p-3 cursor-pointer transition hover:-translate-y-1 hover:comic-shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400";
 
     // Guardamos el id del héroe en el elemento, para usarlo después en el modal
     card.dataset.heroId = hero.id;
@@ -45,7 +47,7 @@ export function renderHeroes(heroes) {
     // así ninguna card se estira ni rompe el grid, sea de 1, 2 o 4 columnas
     card.innerHTML = `
       <img src="${hero.images.sm}" alt="${hero.name}" class="w-full h-40 object-cover rounded" />
-      <h2 class="text-lg font-semibold mt-2 line-clamp-2">${hero.name}</h2>
+      <h2 class="text-lg font-heading tracking-wide mt-2 line-clamp-2">${hero.name}</h2>
       <p class="text-sm text-gray-500 truncate">${hero.biography.publisher}</p>
     `;
 

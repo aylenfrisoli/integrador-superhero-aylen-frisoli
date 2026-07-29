@@ -1,1 +1,79 @@
 @import "tailwindcss";
+
+/* Paleta e identidad tipográfica del proyecto (Tailwind v4 genera automáticamente
+   las utilidades font-heading/font-body y bg-/text-/border-comic-red|blue|gold) */
+@theme {
+  --color-comic-red: #e4002b;
+  --color-comic-blue: #0056a4;
+  --color-comic-gold: #ffc72c;
+  --font-heading: "Bangers", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+/* Inter como tipografía base de todo el texto; font-heading se aplica puntualmente
+   sobre esta base donde corresponda (título y nombres de héroe) */
+body {
+  font-family: var(--font-body);
+}
+
+/* Sticky footer con flexbox: el footer vive fuera de #app (hermano suyo en el body),
+   así que el body es el que se hace columna flex y ocupa toda la ventana. #app tiene
+   flex-auto (ver index.html) para estirarse y absorber el espacio sobrante, empujando
+   el footer al fondo real de la ventana incluso con poco contenido (ej: 0 resultados).
+   100svh excluye las barras del navegador mobile que aparecen/desaparecen al scrollear;
+   se deja 100vh antes como fallback para navegadores que no soportan unidades sv* */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+/* Sombra dura sin blur (estilo panel de cómic), reutilizable en cards, modal y botones */
+@utility comic-shadow {
+  box-shadow: 6px 6px 0 #000;
+}
+
+/* Versión más grande, usada en el hover de las cards para el efecto "panel que reacciona" */
+@utility comic-shadow-lg {
+  box-shadow: 8px 8px 0 #000;
+}
+
+/* Sombra dorada, usada en el focus de inputs/selects. Reemplaza al ring difuminado de
+   Tailwind: un ring y esta sombra compiten por la misma propiedad box-shadow y no se
+   combinan (gana una sola declaración), así que en vez de pelear con eso usamos una
+   sombra dura de color, coherente con el resto del sistema visual sin blur */
+@utility comic-shadow-gold {
+  box-shadow: 8px 8px 0 var(--color-comic-gold);
+}
+
+/* Text-shadow oscuro sutil para que el título blanco del hero resalte sobre el fondo rojo */
+@utility comic-text-shadow {
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* Borde "papel desgarrado" entre el hero y el resto del contenido. El zigzag se arma con
+   dos triángulos diagonales (linear-gradient a 135deg y 225deg, con corte duro al 50%):
+   el segundo gradient arranca desplazado medio tile (8px de 16px) respecto al primero,
+   así los triángulos se alternan en vez de superponerse y forman el dentado */
+@utility comic-torn-edge {
+  height: 16px;
+  background-image: linear-gradient(135deg, #000 50%, transparent 50%),
+    linear-gradient(225deg, #000 50%, transparent 50%);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 0;
+  background-repeat: repeat-x;
+}
+
+/* Textura halftone muy sutil (trama de puntos tipo cómic) de fondo, con opacidad baja
+   para no competir con el contenido */
+body {
+  background-image: repeating-radial-gradient(
+    circle at 0 0,
+    rgba(0, 0, 0, 0.04) 0,
+    rgba(0, 0, 0, 0.04) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+  background-size: 12px 12px;
+}

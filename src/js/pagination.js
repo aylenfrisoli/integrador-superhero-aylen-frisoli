@@ -54,10 +54,12 @@ export function goToLastPage() {
   goToPage(getTotalPages());
 }
 
-// Clases de Tailwind que comparten los 4 botones de paginación,
-// incluyendo el estilo "apagado" cuando el botón está disabled
+// Clases de Tailwind que comparten los 4 botones de paginación: mismo lenguaje
+// visual que cards/modal (borde negro grueso + sombra dura) y efecto de "empuje"
+// al hacer click (el botón se desplaza y pierde la sombra, simulando que se hunde).
+// Incluye también el estilo "apagado" cuando el botón está disabled
 const BUTTON_CLASSES =
-  "rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm shadow hover:bg-blue-50 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300";
+  "rounded-lg border-4 border-black bg-white px-3 py-1.5 text-sm font-bold uppercase comic-shadow transition hover:bg-comic-gold/10 hover:border-comic-gold active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-black";
 
 // Actualiza el texto "Showing X of Y results":
 // X = héroes que se ven en la página actual, Y = total de resultados filtrados
