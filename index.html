@@ -65,12 +65,27 @@
           />
         </section>
 
+        <!-- Botón solo visible en mobile (md:hidden) para mostrar/ocultar el sidebar.
+             Va afuera de #filters-sidebar: si estuviera adentro, ocultar el aside
+             también escondería el único botón para volver a mostrarlo -->
+        <button
+          type="button"
+          id="toggle-filters-button"
+          aria-expanded="false"
+          aria-controls="filters-sidebar"
+          class="md:hidden mb-4 w-full rounded-lg border-4 border-black bg-comic-gold comic-shadow px-3 py-2 font-bold uppercase transition hover:bg-comic-gold/80 active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          Filters
+        </button>
+
         <!-- Layout de dos columnas: sidebar de filtros + contenido principal.
              flex-col apila todo en mobile; md:flex-row los pone lado a lado en desktop -->
         <div id="filters-layout" class="flex flex-col md:flex-row gap-4">
-          <!-- md:w-64 shrink-0: en desktop el sidebar tiene ancho fijo y no se achica
-               si el contenido de al lado necesita más espacio -->
-          <aside id="filters-sidebar" class="flex flex-col gap-4 md:w-64 shrink-0">
+          <!-- hidden md:flex: en mobile el aside no se muestra por default (JS lo destapa
+               con el botón de arriba); desde md, md:flex siempre gana sin importar el
+               toggle. md:w-64 shrink-0: en desktop el sidebar tiene ancho fijo y no se
+               achica si el contenido de al lado necesita más espacio -->
+          <aside id="filters-sidebar" class="hidden flex-col gap-4 md:flex md:w-64 shrink-0">
             <!-- Cada bloque de filtro es su propio panel cómic (borde negro + sombra dura),
                  igual que las cards de héroe -->
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">

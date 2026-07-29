@@ -28,6 +28,9 @@ import {
 // Importamos la función que activa el modal de detalle del héroe
 import { initModal } from "./js/modal.js";
 
+// Importamos la función que activa el botón "Filters" para mostrar/ocultar el sidebar en mobile
+import { initSidebarToggle } from "./js/sidebar.js";
+
 // Función principal que arranca la aplicación
 async function init() {
   // Mostramos un aviso de carga mientras esperamos la respuesta de la API
@@ -82,3 +85,6 @@ initPagination();
 
 // Activamos el modal: escucha los clicks en las cards para abrirlo y en el botón para cerrarlo
 initModal();
+
+// Activamos el botón "Filters" que muestra/oculta el sidebar en mobile
+initSidebarToggle();
