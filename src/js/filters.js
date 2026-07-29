@@ -24,16 +24,68 @@ function matchesSelectedAlignment(hero) {
   );
 }
 
-// Función central: combina búsqueda + editorial + alineación en un solo filtrado.
+// Compara la letra inicial del nombre del héroe con la elegida en el filtro
+function matchesSelectedLetter(hero) {
+  return (
+    state.selectedLetter === "all" ||
+    hero.name.charAt(0).toUpperCase() === state.selectedLetter
+  );
+}
+
+// Etiqueta común para agrupar valores faltantes de gender/race, compartida entre
+// el filtrado (acá abajo) y la generación de opciones de los selects
+const UNKNOWN_LABEL = "Unknown";
+
+// Algunos héroes tienen gender/race vacío, "-" o null (race puede venir como null
+// directo, no solo como "-"). Agrupamos todos esos casos bajo "Unknown" para que
+// tanto el filtro como el select los traten como un solo valor
+function normalizeOrUnknown(rawValue) {
+  return !rawValue || rawValue === "-" ? UNKNOWN_LABEL : rawValue;
+}
+
+// Compara el género del héroe con el elegido en el filtro ("all" = no filtrar)
+function matchesSelectedGender(hero) {
+  return (
+    state.selectedGender === "all" ||
+    normalizeOrUnknown(hero.appearance.gender) === state.selectedGender
+  );
+}
+
+// Compara la raza del héroe con la elegida en el filtro ("all" = no filtrar)
+function matchesSelectedRace(hero) {
+  return (
+    state.selectedRace === "all" ||
+    normalizeOrUnknown(hero.appearance.race) === state.selectedRace
+  );
+}
+
+// Ordena una lista de héroes por nombre sin modificar el array original
+function sortHeroesByName(heroes, direction) {
+  const sortedHeroes = [...heroes].sort((a, b) => a.name.localeCompare(b.name));
+  return direction === "desc" ? sortedHeroes.reverse() : sortedHeroes;
+}
+
+// Función central: combina búsqueda + editorial + alineación + letra + género + raza
+// en un solo filtrado, y ordena alfabéticamente si corresponde.
 // Siempre parte de state.allHeroes para que ningún filtro borre a los demás.
 export function applyFilters() {
-  state.filteredHeroes = state.allHeroes.filter(
+  let result = state.allHeroes.filter(
     (hero) =>
       matchesSearchQuery(hero) &&
       matchesSelectedPublisher(hero) &&
-      matchesSelectedAlignment(hero)
+      matchesSelectedAlignment(hero) &&
+      matchesSelectedLetter(hero) &&
+      matchesSelectedGender(hero) &&
+      matchesSelectedRace(hero)
   );
 
+  // El orden se aplica después de filtrar y antes de paginar; "none" deja
+  // el resultado tal cual viene de la API
+  if (state.sortOrder !== "none") {
+    result = sortHeroesByName(result, state.sortOrder);
+  }
+
+  state.filteredHeroes = result;
   state.currentPage = 1;
 
   // Vuelve a dibujar los héroes de la nueva página 1 junto con los botones
