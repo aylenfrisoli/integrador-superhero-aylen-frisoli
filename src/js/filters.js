@@ -164,13 +164,16 @@ export function populateGenderAndRaceFilterOptions() {
 
 // Refleja visualmente si un filtro está "activo" (valor distinto de "all") con el
 // color de acento comic-blue. Es solo estético: no cambia el estado ni el filtrado.
-// border-black se saca mientras está activo: si conviviera con border-comic-blue
-// ambas clases tienen la misma especificidad y el borde negro ganaría el empate
+// border-black y bg-white se sacan mientras está activo: si convivieran con
+// border-comic-blue/bg-comic-blue ambas clases tienen la misma especificidad, y al
+// tener la misma especificidad gana la que Tailwind generó después en el CSS (bg-white
+// le gana a bg-comic-blue), tapando el color de acento
 function updateFilterActiveStyle(selectElement) {
   const isActive = selectElement.value !== "all";
   selectElement.classList.toggle("border-comic-blue", isActive);
   selectElement.classList.toggle("bg-comic-blue/10", isActive);
   selectElement.classList.toggle("border-black", !isActive);
+  selectElement.classList.toggle("bg-white", !isActive);
 }
 
 // Conecta los selects de editorial y alineación: al cambiar, actualizan el estado
@@ -232,7 +235,9 @@ export function populateLetterFilterGrid() {
 }
 
 // Resalta con el acento comic-blue el botón de la letra activa (o ninguno si
-// selectedLetter es "all"), mismo criterio de swap de borde que updateFilterActiveStyle
+// selectedLetter es "all"), mismo criterio de swap de borde/fondo que updateFilterActiveStyle.
+// bg-white se saca mientras está activo: si no, tapa a bg-comic-blue (misma especificidad,
+// pero bg-white queda después en el CSS generado) y el texto blanco queda ilegible
 function updateActiveLetterStyle() {
   const letterButtons = document.querySelectorAll("#letter-filter-grid button[data-letter]");
 
@@ -242,6 +247,7 @@ function updateActiveLetterStyle() {
     button.classList.toggle("text-white", isActive);
     button.classList.toggle("border-comic-blue", isActive);
     button.classList.toggle("border-black", !isActive);
+    button.classList.toggle("bg-white", !isActive);
   });
 }
 
@@ -263,7 +269,8 @@ export function initLetterFilter() {
   });
 }
 
-// Resalta con el acento comic-blue el botón de sort activo (o ninguno si sortOrder es "none")
+// Resalta con el acento comic-blue el botón de sort activo (o ninguno si sortOrder es "none").
+// bg-white se saca mientras está activo por el mismo motivo que en updateActiveLetterStyle
 function updateSortButtonsActiveStyle() {
   const ascButton = document.getElementById("sort-asc-button");
   const descButton = document.getElementById("sort-desc-button");
@@ -275,6 +282,7 @@ function updateSortButtonsActiveStyle() {
     button.classList.toggle("text-white", isActive);
     button.classList.toggle("border-comic-blue", isActive);
     button.classList.toggle("border-black", !isActive);
+    button.classList.toggle("bg-white", !isActive);
   });
 }
 
