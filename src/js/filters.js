@@ -1,14 +1,14 @@
-// Traemos el estado global y la función que vuelve a dibujar héroes + paginación juntos
+// traemos el estado global y la funcion para redibujar heroes y paginacion
 import { state } from "./state.js";
 import { refreshHeroList } from "./pagination.js";
 
-// Compara el nombre del héroe con el texto buscado, sin importar mayúsculas/minúsculas
+// compara el nombre del heroe con el texto buscado, sin importar mayusculas o minusculas
 function matchesSearchQuery(hero) {
   const normalizedQuery = state.searchQuery.trim().toLowerCase();
   return hero.name.toLowerCase().includes(normalizedQuery);
 }
 
-// Compara la editorial del héroe con la elegida en el filtro ("all" = no filtrar)
+// compara la editorial del heroe con la elegida en el filtro ("all" = no filtrar)
 function matchesSelectedPublisher(hero) {
   return (
     state.selectedPublisher === "all" ||
@@ -16,7 +16,7 @@ function matchesSelectedPublisher(hero) {
   );
 }
 
-// Compara la alineación del héroe con la elegida en el filtro ("all" = no filtrar)
+// compara la alineacion del heroe con la elegida en el filtro ("all" = no filtrar)
 function matchesSelectedAlignment(hero) {
   return (
     state.selectedAlignment === "all" ||
@@ -24,7 +24,7 @@ function matchesSelectedAlignment(hero) {
   );
 }
 
-// Compara la letra inicial del nombre del héroe con la elegida en el filtro
+// compara la letra inicial del nombre del heroe con la elegida en el filtro
 function matchesSelectedLetter(hero) {
   return (
     state.selectedLetter === "all" ||
@@ -32,18 +32,17 @@ function matchesSelectedLetter(hero) {
   );
 }
 
-// Etiqueta común para agrupar valores faltantes de gender/race, compartida entre
-// el filtrado (acá abajo) y la generación de opciones de los selects
+// etiqueta comun para agrupar valores faltantes de gender/race, se usa en el
+// filtrado y en la generacion de opciones de los selects
 const UNKNOWN_LABEL = "Desconocido";
 
-// Algunos héroes tienen gender/race vacío, "-" o null (race puede venir como null
-// directo, no solo como "-"). Agrupamos todos esos casos bajo "Desconocido" para que
-// tanto el filtro como el select los traten como un solo valor
+// algunos heroes tienen gender/race vacio, "-" o null; agrupamos todos esos
+// casos bajo "Desconocido" para que el filtro y el select los traten igual
 function normalizeOrUnknown(rawValue) {
   return !rawValue || rawValue === "-" ? UNKNOWN_LABEL : rawValue;
 }
 
-// Compara el género del héroe con el elegido en el filtro ("all" = no filtrar)
+// compara el genero del heroe con el elegido en el filtro ("all" = no filtrar)
 function matchesSelectedGender(hero) {
   return (
     state.selectedGender === "all" ||
@@ -51,7 +50,7 @@ function matchesSelectedGender(hero) {
   );
 }
 
-// Compara la raza del héroe con la elegida en el filtro ("all" = no filtrar)
+// compara la raza del heroe con la elegida en el filtro ("all" = no filtrar)
 function matchesSelectedRace(hero) {
   return (
     state.selectedRace === "all" ||
@@ -59,15 +58,15 @@ function matchesSelectedRace(hero) {
   );
 }
 
-// Ordena una lista de héroes por nombre sin modificar el array original
+// ordena una lista de heroes por nombre sin modificar el array original
 function sortHeroesByName(heroes, direction) {
   const sortedHeroes = [...heroes].sort((a, b) => a.name.localeCompare(b.name));
   return direction === "desc" ? sortedHeroes.reverse() : sortedHeroes;
 }
 
-// Función central: combina búsqueda + editorial + alineación + letra + género + raza
-// en un solo filtrado, y ordena alfabéticamente si corresponde.
-// Siempre parte de state.allHeroes para que ningún filtro borre a los demás.
+// funcion central: combina busqueda + editorial + alineacion + letra + genero + raza
+// en un solo filtrado, y ordena alfabeticamente si corresponde.
+// siempre parte de state.allHeroes para no perder los demas filtros ya aplicados
 export function applyFilters() {
   let result = state.allHeroes.filter(
     (hero) =>
@@ -79,7 +78,7 @@ export function applyFilters() {
       matchesSelectedRace(hero)
   );
 
-  // El orden se aplica después de filtrar y antes de paginar; "none" deja
+  // el orden se aplica despues de filtrar y antes de paginar; "none" deja
   // el resultado tal cual viene de la API
   if (state.sortOrder !== "none") {
     result = sortHeroesByName(result, state.sortOrder);
@@ -88,13 +87,13 @@ export function applyFilters() {
   state.filteredHeroes = result;
   state.currentPage = 1;
 
-  // Vuelve a dibujar los héroes de la nueva página 1 junto con los botones
-  // de paginación y el resumen de resultados según el nuevo filtro
+  // redibuja los heroes de la nueva pagina 1 junto con los botones
+  // de paginacion y el resumen de resultados
   refreshHeroList();
 }
 
-// Genera las opciones del select de editoriales a partir de los héroes ya cargados,
-// para no tener que escribirlas a mano (se ordenan alfabéticamente, sin repetidos)
+// genera las opciones del select de editoriales a partir de los heroes ya
+// cargados, para no tener que escribirlas a mano (ordenadas, sin repetidos)
 export function populatePublisherFilterOptions() {
   const publisherSelect = document.getElementById("filter-publisher");
 
@@ -114,7 +113,7 @@ export function populatePublisherFilterOptions() {
   });
 }
 
-// Ordena una lista de valores alfabéticamente dejando "Desconocido" siempre al final
+// ordena una lista de valores alfabeticamente dejando "Desconocido" al final
 function sortWithUnknownLast(values) {
   return values.sort((a, b) => {
     if (a === UNKNOWN_LABEL) return 1;
@@ -123,9 +122,8 @@ function sortWithUnknownLast(values) {
   });
 }
 
-// Recorre state.allHeroes UNA sola vez para juntar los valores crudos de gender
-// y race, y arma las dos listas únicas (sin repetidos, "Desconocido" agrupado y al final)
-// que se usan para llenar los selects correspondientes
+// recorre state.allHeroes una sola vez para juntar los valores de gender y
+// race, y arma las dos listas unicas que se usan para llenar los selects
 function buildGenderAndRaceOptionLists() {
   const genderValues = [];
   const raceValues = [];
@@ -141,7 +139,7 @@ function buildGenderAndRaceOptionLists() {
   };
 }
 
-// Agrega una opción <option> al select por cada valor de la lista
+// agrega una opcion <option> al select por cada valor de la lista
 function appendOptionsToSelect(selectElement, values) {
   values.forEach((value) => {
     const option = document.createElement("option");
@@ -151,8 +149,8 @@ function appendOptionsToSelect(selectElement, values) {
   });
 }
 
-// Llena los selects de género y raza con las opciones armadas a partir de los
-// héroes ya cargados (se llama una sola vez, al iniciar la app)
+// llena los selects de genero y raza con las opciones armadas a partir de
+// los heroes ya cargados (se llama una sola vez, al iniciar la app)
 export function populateGenderAndRaceFilterOptions() {
   const genderSelect = document.getElementById("filter-gender");
   const raceSelect = document.getElementById("filter-race");
@@ -162,12 +160,8 @@ export function populateGenderAndRaceFilterOptions() {
   appendOptionsToSelect(raceSelect, raceOptions);
 }
 
-// Refleja visualmente si un filtro está "activo" (valor distinto de "all") con el
-// color de acento comic-blue. Es solo estético: no cambia el estado ni el filtrado.
-// border-black y bg-white se sacan mientras está activo: si convivieran con
-// border-comic-blue/bg-comic-blue ambas clases tienen la misma especificidad, y al
-// tener la misma especificidad gana la que Tailwind generó después en el CSS (bg-white
-// le gana a bg-comic-blue), tapando el color de acento
+// cambia las clases del select para marcar visualmente que el filtro esta
+// activo (valor distinto de "all"). es solo estetico, no cambia el filtrado
 function updateFilterActiveStyle(selectElement) {
   const isActive = selectElement.value !== "all";
   selectElement.classList.toggle("border-comic-blue", isActive);
@@ -176,8 +170,8 @@ function updateFilterActiveStyle(selectElement) {
   selectElement.classList.toggle("bg-white", !isActive);
 }
 
-// Conecta los selects de editorial y alineación: al cambiar, actualizan el estado
-// y vuelven a aplicar todos los filtros juntos
+// conecta los selects de editorial y alineacion: al cambiar, actualizan el
+// estado y vuelven a aplicar todos los filtros juntos
 export function initFilters() {
   const publisherSelect = document.getElementById("filter-publisher");
   const alignmentSelect = document.getElementById("filter-alignment");
@@ -209,17 +203,15 @@ export function initFilters() {
   });
 }
 
-// Letras del alfabeto para armar la grilla de botones. No sale de los datos:
-// lo que se genera dinámicamente son los 26 elementos <button>, no el alfabeto en sí
+// letras del alfabeto para armar la grilla de botones (el alfabeto es fijo,
+// lo que se genera dinamicamente son los 26 elementos <button>)
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-// border-2 sin comic-shadow: con 26 botones juntos, un borde de 4px + sombra dura
-// de 6px por celda se vería recargado. El gap del grid ya separa cada botón
 const LETTER_BUTTON_CLASSES =
   "rounded border-2 border-black bg-white text-xs font-bold py-1 transition hover:bg-comic-gold/20 hover:border-comic-gold focus:outline-none focus:ring-2 focus:ring-blue-400";
 
-// Crea los 26 botones A-Z dentro de la grilla. Se llama una sola vez al iniciar
-// la app: si se llamara de nuevo duplicaría los botones
+// crea los 26 botones a-z dentro de la grilla. se llama una sola vez al
+// iniciar la app: si se llamara de nuevo duplicaria los botones
 export function populateLetterFilterGrid() {
   const letterGrid = document.getElementById("letter-filter-grid");
 
@@ -234,10 +226,8 @@ export function populateLetterFilterGrid() {
   });
 }
 
-// Resalta con el acento comic-blue el botón de la letra activa (o ninguno si
-// selectedLetter es "all"), mismo criterio de swap de borde/fondo que updateFilterActiveStyle.
-// bg-white se saca mientras está activo: si no, tapa a bg-comic-blue (misma especificidad,
-// pero bg-white queda después en el CSS generado) y el texto blanco queda ilegible
+// marca visualmente la letra activa cambiando sus clases (o ninguna si
+// selectedLetter es "all")
 function updateActiveLetterStyle() {
   const letterButtons = document.querySelectorAll("#letter-filter-grid button[data-letter]");
 
@@ -251,8 +241,8 @@ function updateActiveLetterStyle() {
   });
 }
 
-// Conecta un solo listener delegado en la grilla (los 26 botones no se recrean
-// nunca, pero se mantiene el mismo patrón de delegación que usa pagination.js)
+// conecta un solo listener delegado en la grilla (los 26 botones no se
+// recrean nunca, pero se mantiene el mismo patron que usa pagination.js)
 export function initLetterFilter() {
   const letterGrid = document.getElementById("letter-filter-grid");
 
@@ -260,7 +250,7 @@ export function initLetterFilter() {
     const button = event.target.closest("button[data-letter]");
     if (!button) return;
 
-    // Un segundo click sobre la misma letra la desactiva (vuelve a "all")
+    // un segundo click sobre la misma letra la desactiva (vuelve a "all")
     const clickedLetter = button.dataset.letter;
     state.selectedLetter = state.selectedLetter === clickedLetter ? "all" : clickedLetter;
 
@@ -269,8 +259,8 @@ export function initLetterFilter() {
   });
 }
 
-// Resalta con el acento comic-blue el botón de sort activo (o ninguno si sortOrder es "none").
-// bg-white se saca mientras está activo por el mismo motivo que en updateActiveLetterStyle
+// marca visualmente el boton de orden activo cambiando sus clases (o
+// ninguno si sortOrder es "none")
 function updateSortButtonsActiveStyle() {
   const ascButton = document.getElementById("sort-asc-button");
   const descButton = document.getElementById("sort-desc-button");
@@ -286,14 +276,14 @@ function updateSortButtonsActiveStyle() {
   });
 }
 
-// Un segundo click sobre el mismo orden lo apaga (vuelve a "none")
+// un segundo click sobre el mismo orden lo apaga (vuelve a "none")
 function setSortOrder(newOrder) {
   state.sortOrder = state.sortOrder === newOrder ? "none" : newOrder;
   updateSortButtonsActiveStyle();
   applyFilters();
 }
 
-// Conecta los dos botones de orden alfabético
+// conecta los dos botones de orden alfabetico
 export function initSortButtons() {
   document.getElementById("sort-asc-button").addEventListener("click", () => setSortOrder("asc"));
   document.getElementById("sort-desc-button").addEventListener("click", () => setSortOrder("desc"));

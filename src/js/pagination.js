@@ -1,7 +1,7 @@
 import { state } from "./state.js";
 import { renderHeroes } from "./render.js";
 
-// Devuelve solo los héroes que corresponden a la página actual
+// devuelve solo los heroes que corresponden a la pagina actual
 export function getHeroesForCurrentPage() {
   const startIndex = (state.currentPage - 1) * state.heroesPerPage;
   const endIndex = startIndex + state.heroesPerPage;
@@ -10,8 +10,8 @@ export function getHeroesForCurrentPage() {
   return state.filteredHeroes.slice(startIndex, endIndex);
 }
 
-// Calcula cuántas páginas hay en total según los héroes filtrados.
-// Si no hay resultados, igual devolvemos 1 para no mostrar "Página 1 de 0"
+// calcula cuantas paginas hay en total segun los heroes filtrados.
+// si no hay resultados, igual devolvemos 1 para no mostrar "pagina 1 de 0"
 export function getTotalPages() {
   return Math.max(
     1,
@@ -19,16 +19,15 @@ export function getTotalPages() {
   );
 }
 
-// Vuelve a dibujar la página actual de héroes y los controles de paginación juntos.
-// La usan goToPage, applyFilters y el arranque de la app, para no repetir este mismo
-// par de llamadas en cada lugar que cambia qué héroes hay que mostrar
+// vuelve a dibujar la pagina actual de heroes y los controles de paginacion juntos.
+// la usan goToPage, applyFilters y el arranque de la app para no repetir este llamado
 export function refreshHeroList() {
   renderHeroes(getHeroesForCurrentPage());
   renderPaginationControls();
 }
 
-// Cambia de página: valida que el número esté entre 1 y el total de páginas,
-// actualiza el estado y vuelve a dibujar tanto los héroes como los controles
+// cambia de pagina: valida que el numero este entre 1 y el total de paginas,
+// actualiza el estado y vuelve a dibujar tanto los heroes como los controles
 export function goToPage(pageNumber) {
   const totalPages = getTotalPages();
   const validPage = Math.min(Math.max(pageNumber, 1), totalPages);
@@ -37,7 +36,7 @@ export function goToPage(pageNumber) {
   refreshHeroList();
 }
 
-// Atajos de navegación: van directo a la primera, anterior, siguiente o última página
+// atajos de navegacion: van directo a la primera, anterior, siguiente o ultima pagina
 export function goToFirstPage() {
   goToPage(1);
 }
@@ -54,15 +53,11 @@ export function goToLastPage() {
   goToPage(getTotalPages());
 }
 
-// Clases de Tailwind que comparten los 4 botones de paginación: mismo lenguaje
-// visual que cards/modal (borde negro grueso + sombra dura) y efecto de "empuje"
-// al hacer click (el botón se desplaza y pierde la sombra, simulando que se hunde).
-// Incluye también el estilo "apagado" cuando el botón está disabled
 const BUTTON_CLASSES =
   "rounded-lg border-4 border-black bg-white px-3 py-1.5 text-sm font-bold uppercase comic-shadow transition hover:bg-comic-gold/10 hover:border-comic-gold active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-black";
 
-// Actualiza el texto "Showing X of Y results":
-// X = héroes que se ven en la página actual, Y = total de resultados filtrados
+// actualiza el texto "mostrando x de y resultados":
+// x = heroes que se ven en la pagina actual, y = total de resultados filtrados
 function updateResultsSummary() {
   const resultsSummary = document.getElementById("results-summary");
   if (!resultsSummary) return;
@@ -71,8 +66,8 @@ function updateResultsSummary() {
   resultsSummary.textContent = `Mostrando ${shownCount} de ${state.filteredHeroes.length} resultados`;
 }
 
-// Dibuja los botones First/Previous/Next/Last y el texto "Page X of Y" dentro de #pagination-controls.
-// Cada botón se deshabilita solo cuando no corresponde usarlo (ej: Previous en la página 1)
+// dibuja los botones first/previous/next/last y el texto "pagina X de Y" dentro de #pagination-controls.
+// cada boton se deshabilita solo cuando no corresponde usarlo (ej: previous en la pagina 1)
 export function renderPaginationControls() {
   const paginationControls = document.getElementById("pagination-controls");
   const totalPages = getTotalPages();
@@ -87,11 +82,11 @@ export function renderPaginationControls() {
     <button type="button" data-action="last" class="${BUTTON_CLASSES}" ${isLastPage ? "disabled" : ""}>Última</button>
   `;
 
-  // Cada vez que se redibujan los controles, actualizamos también el resumen
+  // cada vez que se redibujan los controles, actualizamos tambien el resumen
   updateResultsSummary();
 }
 
-// Relaciona cada botón (por su data-action) con la función que tiene que ejecutar
+// relaciona cada boton (por su data-action) con la funcion que tiene que ejecutar
 const PAGE_ACTIONS = {
   first: goToFirstPage,
   previous: goToPreviousPage,
@@ -99,7 +94,7 @@ const PAGE_ACTIONS = {
   last: goToLastPage,
 };
 
-// Conecta un solo listener en el contenedor (delegación de eventos), porque los
+// conecta un solo listener en el contenedor (delegacion de eventos), porque los
 // botones se recrean cada vez que renderPaginationControls redibuja el HTML
 export function initPagination() {
   const paginationControls = document.getElementById("pagination-controls");

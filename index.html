@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fuentes de Google: Bangers para títulos/nombres (estilo cómic) e Inter para el resto del texto -->
+    <!-- fuentes de google: bangers para titulos e inter para el resto del texto -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,7 +13,7 @@
       rel="stylesheet"
     />
 
-    <!-- Tabler Icons (webfont): usamos el ícono de GitHub en el footer -->
+    <!-- tabler icons: usamos el icono de github en el footer -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
@@ -23,13 +23,8 @@
     <link rel="stylesheet" href="/src/app.css" />
   </head>
   <body>
-    <!-- flex-auto: dentro del body (flex-column, ver app.css), #app crece para ocupar
-         el espacio vertical que sobra, empujando el footer hasta el fondo real de la
-         ventana en vez de dejarlo flotando debajo de poco contenido (ej: 0 resultados) -->
     <div id="app" class="flex-auto">
-      <!-- Hero section: banda de ancho completo en comic-red, con título grande, subtítulo
-           y badge con la cantidad de héroes (el texto del badge se actualiza desde app.js
-           una vez que la API responde) -->
+      <!-- el texto del badge se actualiza desde app.js cuando responde la API -->
       <header class="bg-comic-red px-4 py-16 md:py-24 text-center">
         <h1 class="font-heading text-5xl md:text-7xl tracking-wide text-white comic-text-shadow">
           Buscador de Superhéroes
@@ -45,17 +40,10 @@
         </p>
       </header>
 
-      <!-- Divider zigzag "papel desgarrado" entre el hero y el resto del contenido
-           (ver .comic-torn-edge en app.css) -->
       <div class="comic-torn-edge" aria-hidden="true"></div>
 
-      <!-- max-w-6xl + mx-auto: en pantallas grandes el contenido no se estira de punta
-           a punta, queda centrado y más compacto -->
       <main class="p-4 max-w-6xl mx-auto">
-        <!-- Barra de búsqueda por nombre, sola arriba de todo -->
         <section id="search-section" class="mb-4">
-          <!-- Mismo lenguaje visual "cómic" que cards/botones (borde negro + sombra dura),
-               con acento dorado en hover/focus para que se sienta parte del mismo sistema -->
           <input
             type="search"
             id="search-input"
@@ -65,9 +53,9 @@
           />
         </section>
 
-        <!-- Botón solo visible en mobile (md:hidden) para mostrar/ocultar el sidebar.
-             Va afuera de #filters-sidebar: si estuviera adentro, ocultar el aside
-             también escondería el único botón para volver a mostrarlo -->
+        <!-- boton para mostrar/ocultar el sidebar en mobile. va afuera de filters-sidebar
+             porque si estuviera adentro, ocultar el aside tambien esconderia el unico
+             boton para volver a mostrarlo -->
         <button
           type="button"
           id="toggle-filters-button"
@@ -78,20 +66,12 @@
           Filtros
         </button>
 
-        <!-- Layout de dos columnas: sidebar de filtros + contenido principal.
-             flex-col apila todo en mobile; md:flex-row los pone lado a lado en desktop -->
         <div id="filters-layout" class="flex flex-col md:flex-row gap-4">
-          <!-- hidden md:flex: en mobile el aside no se muestra por default (JS lo destapa
-               con el botón de arriba); desde md, md:flex siempre gana sin importar el
-               toggle. md:w-64 shrink-0: en desktop el sidebar tiene ancho fijo y no se
-               achica si el contenido de al lado necesita más espacio -->
           <aside id="filters-sidebar" class="hidden flex-col gap-4 md:flex md:w-64 shrink-0">
-            <!-- Cada bloque de filtro es su propio panel cómic (borde negro + sombra dura),
-                 igual que las cards de héroe -->
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
               <h3 class="font-heading tracking-wide text-lg mb-2">Orden</h3>
-              <!-- Botones toggle: clickear activa ese orden; clickear de nuevo el mismo
-                   botón lo apaga y vuelve a "none" (ver setSortOrder en filters.js) -->
+              <!-- boton toggle: click activa ese orden, otro click sobre el mismo
+                   boton lo apaga y vuelve a "none" (ver setSortOrder en filters.js) -->
               <div class="flex gap-2">
                 <button
                   type="button"
@@ -114,13 +94,13 @@
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
               <h3 class="font-heading tracking-wide text-lg mb-2">Letra</h3>
-              <!-- Grilla A-Z generada dinámicamente por JS, ver populateLetterFilterGrid en filters.js -->
+              <!-- grilla a-z generada por JS, ver populateLetterFilterGrid en filters.js -->
               <div id="letter-filter-grid" class="grid grid-cols-6 gap-1"></div>
             </div>
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
               <h3 class="font-heading tracking-wide text-lg mb-2">Editorial</h3>
-              <!-- Filtro por editorial: las opciones se generan con JS según los datos que llegan de la API -->
+              <!-- las opciones de este filtro se generan con JS segun los datos que llegan de la API -->
               <select
                 id="filter-publisher"
                 aria-label="Filtrar héroes por editorial"
@@ -132,7 +112,7 @@
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
               <h3 class="font-heading tracking-wide text-lg mb-2">Alineación</h3>
-              <!-- Filtro por alineación: bueno, malo o neutral -->
+              <!-- filtro por alineacion: bueno, malo o neutral -->
               <select
                 id="filter-alignment"
                 aria-label="Filtrar héroes por alineación"
@@ -147,8 +127,8 @@
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
               <h3 class="font-heading tracking-wide text-lg mb-2">Género</h3>
-              <!-- Filtro por género: opciones armadas con JS a partir de los datos reales
-                   (agrupan vacío/"-"/null bajo "Desconocido") -->
+              <!-- opciones armadas con JS a partir de los datos reales
+                   (agrupan vacio/"-"/null bajo "Desconocido") -->
               <select
                 id="filter-gender"
                 aria-label="Filtrar héroes por género"
@@ -160,7 +140,7 @@
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
               <h3 class="font-heading tracking-wide text-lg mb-2">Raza</h3>
-              <!-- Filtro por raza: mismo criterio que género -->
+              <!-- filtro por raza: mismo criterio que genero -->
               <select
                 id="filter-race"
                 aria-label="Filtrar héroes por raza"
@@ -171,20 +151,17 @@
             </div>
           </aside>
 
-          <!-- min-w-0: sin esto, un flex item no se achica por debajo del ancho de su
-               contenido, y el grid/paginación podrían empujar el layout de dos columnas -->
           <div id="results-panel" class="flex-1 min-w-0">
-            <!-- Texto que muestra cuántos resultados hay en la página actual sobre el total filtrado -->
+            <!-- muestra cuantos resultados hay en la pagina actual sobre el total filtrado -->
             <p id="results-summary" class="mb-2 text-sm text-gray-500" aria-live="polite"></p>
 
-            <!-- Acá se pintan las cards de héroes con JavaScript -->
-            <!-- 1 columna en mobile, 2 desde sm (tablet angosto), 3 desde md (tablet ancho/desktop) -->
+            <!-- aca se pintan las cards de heroes con JS -->
             <section
               id="hero-grid"
               class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
             ></section>
 
-            <!-- Botones de paginado: First, Previous, Next, Last, dibujados con JavaScript -->
+            <!-- botones de paginado: first, previous, next, last, dibujados con JS -->
             <section
               id="pagination-controls"
               class="flex flex-wrap items-center justify-center gap-2 mt-4"
@@ -193,15 +170,12 @@
         </div>
       </main>
 
-      <!-- Modal con el detalle de cada héroe: se abre al hacer click en una card y se llena con JS -->
-      <!-- En mobile el modal ocupa 90% del viewport en vez de max-w-2xl fijo; desde sm (640px)
-           vuelve al ancho original. max-h-[90vh] + overflow-y-auto evitan que el contenido
-           largo (powerstats) se corte si no entra en la altura de pantalla. -->
+      <!-- modal con el detalle de cada heroe: se abre al hacer click en una card y se llena con JS -->
       <dialog
         id="hero-modal"
         class="m-auto w-[90vw] sm:w-full sm:max-w-2xl max-h-[90vh] overflow-y-auto rounded-lg border-4 border-black bg-white p-6 comic-shadow backdrop:bg-black/50"
       >
-        <!-- Botón para cerrar el modal, siempre visible arriba a la derecha -->
+        <!-- boton para cerrar el modal -->
         <button
           type="button"
           id="close-modal-button"
@@ -211,12 +185,12 @@
           &times;
         </button>
 
-        <!-- Acá se inserta el detalle del héroe seleccionado (imagen, estadísticas, etc.) con JS -->
+        <!-- aca se inserta el detalle del heroe seleccionado (imagen, estadisticas, etc.) con JS -->
         <div id="modal-content"></div>
       </dialog>
     </div>
 
-    <!-- Footer chico y discreto, fuera de #app: es chrome de la página, no parte de la app -->
+    <!-- footer fuera de #app: es chrome de la pagina, no parte de la app -->
     <footer class="bg-black px-4 py-3">
       <p class="flex items-center justify-center gap-2 text-xs text-gray-300">
         <i class="ti ti-brand-github text-sm" aria-hidden="true"></i>
