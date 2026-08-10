@@ -14,11 +14,22 @@ import { refreshHeroList, initPagination } from "./js/pagination.js";
 // Importamos la función que activa la barra de búsqueda
 import { initSearch } from "./js/search.js";
 
-// Importamos las funciones de los filtros: activar los selects y armar las opciones de editorial
-import { initFilters, populatePublisherFilterOptions } from "./js/filters.js";
+// Importamos las funciones de los filtros: activar los selects, armar las opciones
+// de editorial/género/raza, y armar + activar la grilla de letras y los botones de orden
+import {
+  initFilters,
+  populatePublisherFilterOptions,
+  populateGenderAndRaceFilterOptions,
+  populateLetterFilterGrid,
+  initLetterFilter,
+  initSortButtons,
+} from "./js/filters.js";
 
 // Importamos la función que activa el modal de detalle del héroe
 import { initModal } from "./js/modal.js";
+
+// Importamos la función que activa el botón "Filters" para mostrar/ocultar el sidebar en mobile
+import { initSidebarToggle } from "./js/sidebar.js";
 
 // Función principal que arranca la aplicación
 async function init() {
@@ -44,8 +55,10 @@ async function init() {
   document.getElementById("hero-count-badge").textContent =
     `${state.allHeroes.length} heroes and counting`;
 
-  // Ahora que ya tenemos los héroes, armamos las opciones del filtro de editorial
+  // Ahora que ya tenemos los héroes, armamos las opciones de los filtros que
+  // dependen de los datos reales: editorial, género y raza
   populatePublisherFilterOptions();
+  populateGenderAndRaceFilterOptions();
 
   // Mostramos en pantalla los héroes de la página actual junto con los controles
   // de paginación y el resumen de resultados por primera vez
@@ -61,8 +74,17 @@ initSearch();
 // Activamos los selects de filtros para que empiecen a escuchar los cambios
 initFilters();
 
+// La grilla de letras A-Z no depende de los héroes de la API (el alfabeto es fijo),
+// así que se arma y se activa de una vez, sin esperar a init()
+populateLetterFilterGrid();
+initLetterFilter();
+initSortButtons();
+
 // Activamos los botones de paginación (First/Previous/Next/Last) para que respondan a los clicks
 initPagination();
 
 // Activamos el modal: escucha los clicks en las cards para abrirlo y en el botón para cerrarlo
 initModal();
+
+// Activamos el botón "Filters" que muestra/oculta el sidebar en mobile
+initSidebarToggle();
