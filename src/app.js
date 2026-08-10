@@ -1,21 +1,19 @@
-// Importamos la función que trae los héroes desde la API
+// importamos la funcion que trae los heroes desde la API
 import { fetchHeroes } from "./js/api.js";
 
-// Importamos el objeto de estado global
+// importamos el objeto de estado global
 import { state } from "./js/state.js";
 
-// Importamos las funciones que muestran el estado de carga y de error de la API
+// importamos las funciones que muestran el estado de carga y de error de la API
 import { renderLoadingState, renderErrorState } from "./js/render.js";
 
-// Importamos las funciones de paginación: refrescar héroes + controles juntos,
-// y activar los botones First/Previous/Next/Last
+// importamos las funciones de paginacion: refrescar heroes y activar los botones
 import { refreshHeroList, initPagination } from "./js/pagination.js";
 
-// Importamos la función que activa la barra de búsqueda
+// importamos la funcion que activa la barra de busqueda
 import { initSearch } from "./js/search.js";
 
-// Importamos las funciones de los filtros: activar los selects, armar las opciones
-// de editorial/género/raza, y armar + activar la grilla de letras y los botones de orden
+// importamos las funciones de los filtros: selects, opciones y grilla de letras
 import {
   initFilters,
   populatePublisherFilterOptions,
@@ -25,22 +23,21 @@ import {
   initSortButtons,
 } from "./js/filters.js";
 
-// Importamos la función que activa el modal de detalle del héroe
+// importamos la funcion que activa el modal de detalle del heroe
 import { initModal } from "./js/modal.js";
 
-// Importamos la función que activa el botón "Filters" para mostrar/ocultar el sidebar en mobile
+// importamos la funcion que activa el boton para mostrar/ocultar el sidebar en mobile
 import { initSidebarToggle } from "./js/sidebar.js";
 
-// Función principal que arranca la aplicación
+// funcion principal que arranca la aplicacion
 async function init() {
-  // Mostramos un aviso de carga mientras esperamos la respuesta de la API
+  // mostramos un aviso de carga mientras esperamos la respuesta de la API
   renderLoadingState();
 
-  // Esperamos a que la API nos devuelva los héroes...
+  // esperamos a que la API devuelva los heroes
   const heroes = await fetchHeroes();
 
-  // Si la API falló (fetchHeroes devuelve null), avisamos y cortamos acá:
-  // no tiene sentido seguir armando filtros/paginación sin datos
+  // si la API fallo, mostramos error y cortamos aca
   if (heroes === null) {
     renderErrorState();
     return;
@@ -48,43 +45,40 @@ async function init() {
 
   state.allHeroes = heroes;
 
-  // ...y los guardamos también como "filtrados" (por ahora son los mismos)
+  // tambien los guardamos como filtrados, por ahora son los mismos
   state.filteredHeroes = state.allHeroes;
 
-  // Actualizamos el badge del hero con la cantidad real de héroes que trajo la API
+  // actualizamos el badge con la cantidad de heroes que trajo la API
   document.getElementById("hero-count-badge").textContent =
-    `${state.allHeroes.length} heroes and counting`;
+    `${state.allHeroes.length} héroes y sumando`;
 
-  // Ahora que ya tenemos los héroes, armamos las opciones de los filtros que
-  // dependen de los datos reales: editorial, género y raza
+  // armamos las opciones de los filtros que dependen de los datos: editorial, genero y raza
   populatePublisherFilterOptions();
   populateGenderAndRaceFilterOptions();
 
-  // Mostramos en pantalla los héroes de la página actual junto con los controles
-  // de paginación y el resumen de resultados por primera vez
+  // mostramos los heroes de la pagina actual con la paginacion y el resumen
   refreshHeroList();
 }
 
-// Llamamos a la función para que arranque apenas carga la página
+// llamamos a la funcion para que arranque apenas carga la pagina
 init();
 
-// Activamos la barra de búsqueda para que empiece a escuchar lo que se escribe
+// activamos la barra de busqueda
 initSearch();
 
-// Activamos los selects de filtros para que empiecen a escuchar los cambios
+// activamos los selects de filtros
 initFilters();
 
-// La grilla de letras A-Z no depende de los héroes de la API (el alfabeto es fijo),
-// así que se arma y se activa de una vez, sin esperar a init()
+// la grilla de letras no depende de la API, se arma antes de init()
 populateLetterFilterGrid();
 initLetterFilter();
 initSortButtons();
 
-// Activamos los botones de paginación (First/Previous/Next/Last) para que respondan a los clicks
+// activamos los botones de paginacion
 initPagination();
 
-// Activamos el modal: escucha los clicks en las cards para abrirlo y en el botón para cerrarlo
+// activamos el modal para abrir y cerrar con click
 initModal();
 
-// Activamos el botón "Filters" que muestra/oculta el sidebar en mobile
+// activamos el boton que muestra/oculta el sidebar en mobile
 initSidebarToggle();
