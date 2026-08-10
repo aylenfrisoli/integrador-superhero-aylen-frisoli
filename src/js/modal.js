@@ -9,23 +9,23 @@ const heroGrid = document.getElementById("hero-grid");
 
 // Nombre "lindo" para mostrar de cada una de las 6 estadísticas de poder
 const POWERSTATS_LABELS = {
-  intelligence: "Intelligence",
-  strength: "Strength",
-  speed: "Speed",
-  durability: "Durability",
-  power: "Power",
-  combat: "Combat",
+  intelligence: "Inteligencia",
+  strength: "Fuerza",
+  speed: "Velocidad",
+  durability: "Resistencia",
+  power: "Poder",
+  combat: "Combate",
 };
 
-// Si el dato viene vacío, null o undefined, mostramos "Unknown" en vez de dejarlo en blanco
+// Si el dato viene vacío, null o undefined, mostramos "Desconocido" en vez de dejarlo en blanco
 function orUnknown(value) {
-  return value ? value : "Unknown";
+  return value ? value : "Desconocido";
 }
 
 // Los alias vienen como un array (ej: ["Bruce Wayne", "The Caped Crusader"]).
-// Los unimos en un solo texto separado por comas, o mostramos "Unknown" si no hay ninguno
+// Los unimos en un solo texto separado por comas, o mostramos "Desconocido" si no hay ninguno
 function formatAliases(aliases) {
-  if (!Array.isArray(aliases) || aliases.length === 0) return "Unknown";
+  if (!Array.isArray(aliases) || aliases.length === 0) return "Desconocido";
   return aliases.join(", ");
 }
 
@@ -73,17 +73,17 @@ export function openHeroModal(heroId) {
     <p class="text-sm text-gray-500 mb-4">${hero.biography.publisher}</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-sm text-gray-700 mb-4">
-      <p><span class="font-semibold">Full name:</span> ${orUnknown(hero.biography.fullName)}</p>
-      <p><span class="font-semibold">Aliases:</span> ${formatAliases(hero.biography.aliases)}</p>
-      <p><span class="font-semibold">Place of birth:</span> ${orUnknown(hero.biography.placeOfBirth)}</p>
-      <p><span class="font-semibold">Occupation:</span> ${orUnknown(hero.work.occupation)}</p>
-      <p><span class="font-semibold">Height:</span> ${orUnknown(heightImperial)} / ${orUnknown(heightMetric)}</p>
-      <p><span class="font-semibold">Weight:</span> ${orUnknown(weightImperial)} / ${orUnknown(weightMetric)}</p>
-      <p><span class="font-semibold">Group affiliation:</span> ${orUnknown(hero.connections.groupAffiliation)}</p>
-      <p><span class="font-semibold">Relatives:</span> ${orUnknown(hero.connections.relatives)}</p>
+      <p><span class="font-semibold">Nombre completo:</span> ${orUnknown(hero.biography.fullName)}</p>
+      <p><span class="font-semibold">Alias:</span> ${formatAliases(hero.biography.aliases)}</p>
+      <p><span class="font-semibold">Lugar de nacimiento:</span> ${orUnknown(hero.biography.placeOfBirth)}</p>
+      <p><span class="font-semibold">Ocupación:</span> ${orUnknown(hero.work.occupation)}</p>
+      <p><span class="font-semibold">Altura:</span> ${orUnknown(heightImperial)} / ${orUnknown(heightMetric)}</p>
+      <p><span class="font-semibold">Peso:</span> ${orUnknown(weightImperial)} / ${orUnknown(weightMetric)}</p>
+      <p><span class="font-semibold">Afiliación grupal:</span> ${orUnknown(hero.connections.groupAffiliation)}</p>
+      <p><span class="font-semibold">Familiares:</span> ${orUnknown(hero.connections.relatives)}</p>
     </div>
 
-    <h3 class="text-lg font-semibold mb-2">Powerstats</h3>
+    <h3 class="text-lg font-semibold mb-2">Estadísticas de poder</h3>
     ${buildPowerstatsHTML(hero.powerstats)}
   `;
 

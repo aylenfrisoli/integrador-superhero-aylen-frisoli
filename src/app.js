@@ -53,7 +53,7 @@ async function init() {
 
   // Actualizamos el badge del hero con la cantidad real de héroes que trajo la API
   document.getElementById("hero-count-badge").textContent =
-    `${state.allHeroes.length} heroes and counting`;
+    `${state.allHeroes.length} héroes y sumando`;
 
   // Ahora que ya tenemos los héroes, armamos las opciones de los filtros que
   // dependen de los datos reales: editorial, género y raza

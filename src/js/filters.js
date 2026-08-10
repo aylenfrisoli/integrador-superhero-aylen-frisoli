@@ -34,10 +34,10 @@ function matchesSelectedLetter(hero) {
 
 // Etiqueta común para agrupar valores faltantes de gender/race, compartida entre
 // el filtrado (acá abajo) y la generación de opciones de los selects
-const UNKNOWN_LABEL = "Unknown";
+const UNKNOWN_LABEL = "Desconocido";
 
 // Algunos héroes tienen gender/race vacío, "-" o null (race puede venir como null
-// directo, no solo como "-"). Agrupamos todos esos casos bajo "Unknown" para que
+// directo, no solo como "-"). Agrupamos todos esos casos bajo "Desconocido" para que
 // tanto el filtro como el select los traten como un solo valor
 function normalizeOrUnknown(rawValue) {
   return !rawValue || rawValue === "-" ? UNKNOWN_LABEL : rawValue;
@@ -114,7 +114,7 @@ export function populatePublisherFilterOptions() {
   });
 }
 
-// Ordena una lista de valores alfabéticamente dejando "Unknown" siempre al final
+// Ordena una lista de valores alfabéticamente dejando "Desconocido" siempre al final
 function sortWithUnknownLast(values) {
   return values.sort((a, b) => {
     if (a === UNKNOWN_LABEL) return 1;
@@ -124,7 +124,7 @@ function sortWithUnknownLast(values) {
 }
 
 // Recorre state.allHeroes UNA sola vez para juntar los valores crudos de gender
-// y race, y arma las dos listas únicas (sin repetidos, "Unknown" agrupado y al final)
+// y race, y arma las dos listas únicas (sin repetidos, "Desconocido" agrupado y al final)
 // que se usan para llenar los selects correspondientes
 function buildGenderAndRaceOptionLists() {
   const genderValues = [];
@@ -228,7 +228,7 @@ export function populateLetterFilterGrid() {
     button.type = "button";
     button.textContent = letter;
     button.dataset.letter = letter;
-    button.setAttribute("aria-label", `Filter heroes starting with ${letter}`);
+    button.setAttribute("aria-label", `Filtrar héroes que empiezan con ${letter}`);
     button.className = LETTER_BUTTON_CLASSES;
     letterGrid.appendChild(button);
   });

@@ -11,7 +11,7 @@ export function getHeroesForCurrentPage() {
 }
 
 // Calcula cuántas páginas hay en total según los héroes filtrados.
-// Si no hay resultados, igual devolvemos 1 para no mostrar "Page 1 of 0"
+// Si no hay resultados, igual devolvemos 1 para no mostrar "Página 1 de 0"
 export function getTotalPages() {
   return Math.max(
     1,
@@ -68,7 +68,7 @@ function updateResultsSummary() {
   if (!resultsSummary) return;
 
   const shownCount = getHeroesForCurrentPage().length;
-  resultsSummary.textContent = `Showing ${shownCount} of ${state.filteredHeroes.length} results`;
+  resultsSummary.textContent = `Mostrando ${shownCount} de ${state.filteredHeroes.length} resultados`;
 }
 
 // Dibuja los botones First/Previous/Next/Last y el texto "Page X of Y" dentro de #pagination-controls.
@@ -80,11 +80,11 @@ export function renderPaginationControls() {
   const isLastPage = state.currentPage === totalPages;
 
   paginationControls.innerHTML = `
-    <button type="button" data-action="first" class="${BUTTON_CLASSES}" ${isFirstPage ? "disabled" : ""}>First</button>
-    <button type="button" data-action="previous" class="${BUTTON_CLASSES}" ${isFirstPage ? "disabled" : ""}>Previous</button>
-    <span id="page-indicator" class="px-2 py-1.5 text-sm text-gray-600">Page ${state.currentPage} of ${totalPages}</span>
-    <button type="button" data-action="next" class="${BUTTON_CLASSES}" ${isLastPage ? "disabled" : ""}>Next</button>
-    <button type="button" data-action="last" class="${BUTTON_CLASSES}" ${isLastPage ? "disabled" : ""}>Last</button>
+    <button type="button" data-action="first" class="${BUTTON_CLASSES}" ${isFirstPage ? "disabled" : ""}>Primera</button>
+    <button type="button" data-action="previous" class="${BUTTON_CLASSES}" ${isFirstPage ? "disabled" : ""}>Anterior</button>
+    <span id="page-indicator" class="px-2 py-1.5 text-sm text-gray-600">Página ${state.currentPage} de ${totalPages}</span>
+    <button type="button" data-action="next" class="${BUTTON_CLASSES}" ${isLastPage ? "disabled" : ""}>Siguiente</button>
+    <button type="button" data-action="last" class="${BUTTON_CLASSES}" ${isLastPage ? "disabled" : ""}>Última</button>
   `;
 
   // Cada vez que se redibujan los controles, actualizamos también el resumen

@@ -4,12 +4,12 @@ const heroGrid = document.getElementById("hero-grid");
 // Se muestra mientras se espera la respuesta de la API, para que la grilla
 // no se vea vacía/rota mientras carga
 export function renderLoadingState() {
-  heroGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Loading heroes...</p>`;
+  heroGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Cargando héroes...</p>`;
 }
 
 // Se muestra si la API falla, para distinguirlo de una búsqueda sin resultados
 export function renderErrorState() {
-  heroGrid.innerHTML = `<p class="col-span-full text-center text-red-500">We couldn't load the heroes. Please try again later.</p>`;
+  heroGrid.innerHTML = `<p class="col-span-full text-center text-red-500">No pudimos cargar los héroes. Probá de nuevo más tarde.</p>`;
 }
 
 // Esta función recibe un array de héroes y los dibuja en pantalla
@@ -19,7 +19,7 @@ export function renderHeroes(heroes) {
 
   // Si no hay resultados (por ejemplo, una búsqueda sin coincidencias)
   if (heroes.length === 0) {
-    heroGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">No results found</p>`;
+    heroGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">No se encontraron resultados</p>`;
     return;
   }
 
@@ -40,7 +40,7 @@ export function renderHeroes(heroes) {
     // que actúa como un botón que abre el detalle de este héroe
     card.tabIndex = 0;
     card.setAttribute("role", "button");
-    card.setAttribute("aria-label", `View details for ${hero.name}`);
+    card.setAttribute("aria-label", `Ver detalle de ${hero.name}`);
 
     // Insertamos la imagen, el nombre y la editorial usando template strings
     // line-clamp-2 corta nombres largos a 2 líneas y truncate corta la editorial a 1 línea,

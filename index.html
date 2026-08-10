@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -19,7 +19,7 @@
       href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
     />
 
-    <title>integrador-superhero-aylen-frisoli</title>
+    <title>Buscador de Superhéroes</title>
     <link rel="stylesheet" href="/src/app.css" />
   </head>
   <body>
@@ -32,16 +32,16 @@
            una vez que la API responde) -->
       <header class="bg-comic-red px-4 py-16 md:py-24 text-center">
         <h1 class="font-heading text-5xl md:text-7xl tracking-wide text-white comic-text-shadow">
-          Superhero Finder
+          Buscador de Superhéroes
         </h1>
         <p class="mt-4 text-base md:text-lg text-white/85">
-          Search, filter and discover every hero in the multiverse
+          Buscar, filtrar y descubrir a todos los héroes del multiverso
         </p>
         <p
           id="hero-count-badge"
           class="mt-6 inline-block rounded-full border-4 border-black bg-comic-gold comic-shadow px-4 py-2 font-bold text-black"
         >
-          Loading heroes...
+          Cargando héroes...
         </p>
       </header>
 
@@ -59,8 +59,8 @@
           <input
             type="search"
             id="search-input"
-            placeholder="Search heroes by name..."
-            aria-label="Search heroes by name"
+            placeholder="Buscar héroes..."
+            aria-label="Buscar héroes"
             class="w-full sm:w-80 rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
           />
         </section>
@@ -75,7 +75,7 @@
           aria-controls="filters-sidebar"
           class="md:hidden mb-4 w-full rounded-lg border-4 border-black bg-comic-gold comic-shadow px-3 py-2 font-bold uppercase transition hover:bg-comic-gold/80 active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
-          Filters
+          Filtros
         </button>
 
         <!-- Layout de dos columnas: sidebar de filtros + contenido principal.
@@ -89,14 +89,14 @@
             <!-- Cada bloque de filtro es su propio panel cómic (borde negro + sombra dura),
                  igual que las cards de héroe -->
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
-              <h3 class="font-heading tracking-wide text-lg mb-2">Sort</h3>
+              <h3 class="font-heading tracking-wide text-lg mb-2">Orden</h3>
               <!-- Botones toggle: clickear activa ese orden; clickear de nuevo el mismo
                    botón lo apaga y vuelve a "none" (ver setSortOrder en filters.js) -->
               <div class="flex gap-2">
                 <button
                   type="button"
                   id="sort-asc-button"
-                  aria-label="Sort heroes A to Z"
+                  aria-label="Ordenar héroes de la A a la Z"
                   class="flex-1 rounded-lg border-4 border-black bg-white px-3 py-1.5 text-sm font-bold uppercase comic-shadow transition hover:bg-comic-gold/10 hover:border-comic-gold active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   A–Z
@@ -104,7 +104,7 @@
                 <button
                   type="button"
                   id="sort-desc-button"
-                  aria-label="Sort heroes Z to A"
+                  aria-label="Ordenar héroes de la Z a la A"
                   class="flex-1 rounded-lg border-4 border-black bg-white px-3 py-1.5 text-sm font-bold uppercase comic-shadow transition hover:bg-comic-gold/10 hover:border-comic-gold active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   Z–A
@@ -113,60 +113,60 @@
             </div>
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
-              <h3 class="font-heading tracking-wide text-lg mb-2">Letter</h3>
+              <h3 class="font-heading tracking-wide text-lg mb-2">Letra</h3>
               <!-- Grilla A-Z generada dinámicamente por JS, ver populateLetterFilterGrid en filters.js -->
               <div id="letter-filter-grid" class="grid grid-cols-6 gap-1"></div>
             </div>
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
-              <h3 class="font-heading tracking-wide text-lg mb-2">Publisher</h3>
+              <h3 class="font-heading tracking-wide text-lg mb-2">Editorial</h3>
               <!-- Filtro por editorial: las opciones se generan con JS según los datos que llegan de la API -->
               <select
                 id="filter-publisher"
-                aria-label="Filter heroes by publisher"
+                aria-label="Filtrar héroes por editorial"
                 class="w-full rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
               >
-                <option value="all">All Publishers</option>
+                <option value="all">Todas las editoriales</option>
               </select>
             </div>
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
-              <h3 class="font-heading tracking-wide text-lg mb-2">Alignment</h3>
+              <h3 class="font-heading tracking-wide text-lg mb-2">Alineación</h3>
               <!-- Filtro por alineación: bueno, malo o neutral -->
               <select
                 id="filter-alignment"
-                aria-label="Filter heroes by alignment"
+                aria-label="Filtrar héroes por alineación"
                 class="w-full rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
               >
-                <option value="all">All Alignments</option>
-                <option value="good">good</option>
-                <option value="bad">bad</option>
-                <option value="neutral">neutral</option>
+                <option value="all">Todas las alineaciones</option>
+                <option value="good">Bueno</option>
+                <option value="bad">Malo</option>
+                <option value="neutral">Neutral</option>
               </select>
             </div>
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
-              <h3 class="font-heading tracking-wide text-lg mb-2">Gender</h3>
+              <h3 class="font-heading tracking-wide text-lg mb-2">Género</h3>
               <!-- Filtro por género: opciones armadas con JS a partir de los datos reales
-                   (agrupan vacío/"-"/null bajo "Unknown") -->
+                   (agrupan vacío/"-"/null bajo "Desconocido") -->
               <select
                 id="filter-gender"
-                aria-label="Filter heroes by gender"
+                aria-label="Filtrar héroes por género"
                 class="w-full rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
               >
-                <option value="all">All Genders</option>
+                <option value="all">Todos los géneros</option>
               </select>
             </div>
 
             <div class="rounded-lg border-4 border-black bg-white p-3 comic-shadow">
-              <h3 class="font-heading tracking-wide text-lg mb-2">Race</h3>
+              <h3 class="font-heading tracking-wide text-lg mb-2">Raza</h3>
               <!-- Filtro por raza: mismo criterio que género -->
               <select
                 id="filter-race"
-                aria-label="Filter heroes by race"
+                aria-label="Filtrar héroes por raza"
                 class="w-full rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
               >
-                <option value="all">All Races</option>
+                <option value="all">Todas las razas</option>
               </select>
             </div>
           </aside>
@@ -205,7 +205,7 @@
         <button
           type="button"
           id="close-modal-button"
-          aria-label="Close hero details"
+          aria-label="Cerrar detalle del héroe"
           class="absolute top-3 right-3 rounded-full border-4 border-black bg-white px-2.5 py-1 text-lg font-bold uppercase text-gray-500 comic-shadow hover:bg-gray-100 hover:text-gray-800 hover:border-comic-gold active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           &times;
@@ -221,7 +221,7 @@
       <p class="flex items-center justify-center gap-2 text-xs text-gray-300">
         <i class="ti ti-brand-github text-sm" aria-hidden="true"></i>
         <span>
-          Built by
+          Creado por
           <a
             href="https://github.com/aylenfrisoli/integrador-superhero-aylen-frisoli"
             target="_blank"
@@ -229,7 +229,7 @@
             class="font-semibold text-white hover:text-comic-gold hover:underline"
             >Aylen Frisoli</a
           >
-          · Front End Career · 2026
+          · Frontend Developer · 2026
         </span>
       </p>
     </footer>
