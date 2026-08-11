@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# variables de entorno (contienen el access-token de la API)
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

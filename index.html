@@ -24,7 +24,6 @@
   </head>
   <body>
     <div id="app" class="flex-auto">
-      <!-- el texto del badge se actualiza desde app.js cuando responde la API -->
       <header class="bg-comic-red px-4 py-16 md:py-24 text-center">
         <h1 class="font-heading text-5xl md:text-7xl tracking-wide text-white comic-text-shadow">
           Buscador de Superhéroes
@@ -44,13 +43,21 @@
 
       <main class="p-4 max-w-6xl mx-auto">
         <section id="search-section" class="mb-4">
-          <input
-            type="search"
-            id="search-input"
-            placeholder="Buscar héroes..."
-            aria-label="Buscar héroes"
-            class="w-full sm:w-80 rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
-          />
+          <form id="search-form" class="flex flex-col sm:flex-row gap-2">
+            <input
+              type="search"
+              id="search-input"
+              placeholder="Buscar héroes..."
+              aria-label="Buscar héroes"
+              class="w-full sm:w-80 rounded-lg border-4 border-black bg-white p-2 comic-shadow transition hover:border-comic-gold focus:outline-none focus:border-comic-gold focus:comic-shadow-gold"
+            />
+            <button
+              type="submit"
+              class="rounded-lg border-4 border-black bg-comic-gold comic-shadow px-4 py-2 font-bold uppercase transition hover:bg-comic-gold/80 active:translate-x-1 active:translate-y-1 active:shadow-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              Buscar
+            </button>
+          </form>
         </section>
 
         <!-- boton para mostrar/ocultar el sidebar en mobile. va afuera de filters-sidebar

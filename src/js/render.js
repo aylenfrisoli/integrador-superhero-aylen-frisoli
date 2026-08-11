@@ -1,15 +1,53 @@
 // buscamos el contenedor donde van a aparecer las cards, una sola vez
 const heroGrid = document.getElementById("hero-grid");
 
+// limpia paginado y resumen de resultados de una busqueda anterior, para que
+// no queden pisados mientras se muestra un estado vacio/de carga/de error
+function clearPaginationAndSummary() {
+  const paginationControls = document.getElementById("pagination-controls");
+  const resultsSummary = document.getElementById("results-summary");
+
+  if (paginationControls) paginationControls.innerHTML = "";
+  if (resultsSummary) resultsSummary.textContent = "";
+}
+
+// se muestra antes de la primera busqueda, ya que la API no tiene forma de
+// traer "todos los heroes" de entrada: hay que buscar algo primero
+export function renderEmptyState() {
+  heroGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Buscá un héroe por nombre para empezar</p>`;
+  clearPaginationAndSummary();
+}
+
 // se muestra mientras se espera la respuesta de la API, para que la grilla
-// no se vea vacia/rota mientras carga
+// no se vea vacia/rota mientras busca
 export function renderLoadingState() {
-  heroGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Cargando héroes...</p>`;
+  heroGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Buscando héroes...</p>`;
+  clearPaginationAndSummary();
 }
 
 // se muestra si la API falla, para distinguirlo de una busqueda sin resultados
 export function renderErrorState() {
   heroGrid.innerHTML = `<p class="col-span-full text-center text-red-500">No pudimos cargar los héroes. Probá de nuevo más tarde.</p>`;
+  clearPaginationAndSummary();
+}
+
+// el proveedor de la API bloquea activamente que sus imagenes se muestren en
+// otros sitios (challenge anti-bot + cabecera same-origin), asi que no hay
+// forma de mostrar la foto real. en vez del icono de imagen rota del
+// navegador, reemplazamos la imagen por un placeholder cuando falla la carga
+export function attachImageFallback(imgElement) {
+  imgElement.addEventListener(
+    "error",
+    () => {
+      const placeholder = document.createElement("div");
+      placeholder.className = `${imgElement.className} flex items-center justify-center bg-gray-200 text-gray-400 text-3xl`;
+      placeholder.setAttribute("role", "img");
+      placeholder.setAttribute("aria-label", `Imagen no disponible para ${imgElement.alt}`);
+      placeholder.innerHTML = `<i class="ti ti-photo-off" aria-hidden="true"></i>`;
+      imgElement.replaceWith(placeholder);
+    },
+    { once: true }
+  );
 }
 
 // esta funcion recibe un array de heroes y los dibuja en pantalla
@@ -42,10 +80,12 @@ export function renderHeroes(heroes) {
 
     // insertamos la imagen, el nombre y la editorial usando template strings
     card.innerHTML = `
-      <img src="${hero.images.sm}" alt="${hero.name}" class="w-full h-40 object-cover rounded" />
+      <img src="${hero.image.url}" alt="${hero.name}" class="w-full h-40 object-cover rounded" />
       <h2 class="text-lg font-heading tracking-wide mt-2 line-clamp-2">${hero.name}</h2>
       <p class="text-sm text-gray-500 truncate">${hero.biography.publisher}</p>
     `;
+
+    attachImageFallback(card.querySelector("img"));
 
     // agregamos la card ya armada dentro del contenedor
     heroGrid.appendChild(card);

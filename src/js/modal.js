@@ -1,5 +1,7 @@
 // traemos el estado global para poder buscar al heroe seleccionado por su id
 import { state } from "./state.js";
+// misma logica de fallback de imagen que usan las cards de la grilla
+import { attachImageFallback } from "./render.js";
 
 // buscamos los elementos del modal una sola vez, apenas se carga el archivo
 const heroModal = document.getElementById("hero-modal");
@@ -17,15 +19,18 @@ const POWERSTATS_LABELS = {
   combat: "Combate",
 };
 
-// si el dato viene vacio, null o undefined, mostramos "Desconocido" en vez de dejarlo en blanco
+// si el dato viene vacio, null o "-" (placeholder que usa la API para
+// "sin dato"), mostramos "Desconocido" en vez de dejarlo asi
 function orUnknown(value) {
-  return value ? value : "Desconocido";
+  return value && value !== "-" ? value : "Desconocido";
 }
 
-// los alias vienen como un array (ej: ["Bruce Wayne", "The Caped Crusader"]).
-// los unimos en un solo texto separado por comas, o mostramos "Desconocido" si no hay ninguno
+// los alias vienen como un array (ej: ["Insider", "Matches Malone"]), o como
+// ["-"] cuando no hay ninguno. los unimos en un solo texto separado por
+// comas, o mostramos "Desconocido" si no hay ninguno real
 function formatAliases(aliases) {
   if (!Array.isArray(aliases) || aliases.length === 0) return "Desconocido";
+  if (aliases.length === 1 && aliases[0] === "-") return "Desconocido";
   return aliases.join(", ");
 }
 
@@ -56,9 +61,8 @@ function buildPowerstatsHTML(powerstats) {
 
 // busca al heroe por id, arma todo el contenido del modal y lo muestra en pantalla
 export function openHeroModal(heroId) {
-  // el id que llega de la card es un string (viene del dataset), pero hero.id es un numero.
-  // por eso convertimos con Number() antes de comparar
-  const hero = state.allHeroes.find((h) => h.id === Number(heroId));
+  // tanto el id que llega de la card (dataset) como hero.id son strings, se comparan directo
+  const hero = state.allHeroes.find((h) => h.id === heroId);
   if (!hero) return;
 
   // altura y peso vienen como arrays: [imperial, metrico]
@@ -67,25 +71,27 @@ export function openHeroModal(heroId) {
 
   // armamos todo el HTML del detalle del heroe con template strings
   modalContent.innerHTML = `
-    <img src="${hero.images.lg}" alt="${hero.name}" class="w-full h-64 object-cover rounded-lg" />
+    <img src="${hero.image.url}" alt="${hero.name}" class="w-full h-64 object-cover rounded-lg" />
 
     <h2 class="text-2xl font-heading tracking-wide mt-4">${hero.name}</h2>
     <p class="text-sm text-gray-500 mb-4">${hero.biography.publisher}</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-sm text-gray-700 mb-4">
-      <p><span class="font-semibold">Nombre completo:</span> ${orUnknown(hero.biography.fullName)}</p>
+      <p><span class="font-semibold">Nombre completo:</span> ${orUnknown(hero.biography["full-name"])}</p>
       <p><span class="font-semibold">Alias:</span> ${formatAliases(hero.biography.aliases)}</p>
-      <p><span class="font-semibold">Lugar de nacimiento:</span> ${orUnknown(hero.biography.placeOfBirth)}</p>
+      <p><span class="font-semibold">Lugar de nacimiento:</span> ${orUnknown(hero.biography["place-of-birth"])}</p>
       <p><span class="font-semibold">Ocupación:</span> ${orUnknown(hero.work.occupation)}</p>
       <p><span class="font-semibold">Altura:</span> ${orUnknown(heightImperial)} / ${orUnknown(heightMetric)}</p>
       <p><span class="font-semibold">Peso:</span> ${orUnknown(weightImperial)} / ${orUnknown(weightMetric)}</p>
-      <p><span class="font-semibold">Afiliación grupal:</span> ${orUnknown(hero.connections.groupAffiliation)}</p>
+      <p><span class="font-semibold">Afiliación grupal:</span> ${orUnknown(hero.connections["group-affiliation"])}</p>
       <p><span class="font-semibold">Familiares:</span> ${orUnknown(hero.connections.relatives)}</p>
     </div>
 
     <h3 class="text-lg font-semibold mb-2">Estadísticas de poder</h3>
     ${buildPowerstatsHTML(hero.powerstats)}
   `;
+
+  attachImageFallback(modalContent.querySelector("img"));
 
   // showModal() abre el <dialog> como modal nativo: bloquea el resto de la pagina hasta que se cierre
   heroModal.showModal();
