@@ -1,3 +1,8 @@
+import { inject } from "@vercel/analytics";
+
+// Inicializa el rastreo
+inject();
+
 // importamos la funcion que trae los heroes desde la API
 import { fetchHeroes } from "./js/api.js";
 
